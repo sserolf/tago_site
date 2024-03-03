@@ -1,0 +1,67 @@
+---
+interface Props {
+  data: {
+    name: string;
+    date: string;
+    url?: string;
+  }[];
+  locale: string;
+}
+
+const { data, locale } = Astro.props;
+
+const formatDate = (date: string) => {
+  const dateParts = date.split('/');
+  const newDate = new Date();
+  newDate.setDate(Number(dateParts[0]));
+  newDate.setMonth(Number(dateParts[1]) - 1);
+  newDate.setFullYear(Number(dateParts[2]));
+  return newDate;
+};
+const sortedData = data.sort((a, b) => {
+  const dateA = new Date(formatDate(a.date));
+  const dateB = new Date(formatDate(b.date));
+  return Number(dateB) - Number(dateA);
+});
+---
+
+{
+  sortedData.map((gig) => {
+    const date = formatDate(gig.date);
+    const formattedDate = date.toLocaleDateString(locale.replace('_', '-'), {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    });
+
+    return (
+      <li>
+        <>
+          {gig.url ? (
+            <a href={gig.url} target="_blank">
+              <span>{gig.name}</span>
+            </a>
+          ) : (
+            <span>{gig.name}</span>
+          )}
+        </>
+        <span>{formattedDate}</span>
+      </li>
+    );
+  })
+}
+
+<style>
+  a {
+    color: darkblue;
+  }
+
+  h3 {
+    text-align: center;
+  }
+
+  li {
+    display: flex;
+    justify-content: space-between;
+  }
+</style>

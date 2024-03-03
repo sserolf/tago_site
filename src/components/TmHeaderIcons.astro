@@ -1,0 +1,50 @@
+---
+import type { AvailableLanguages } from 'src/types/language';
+import TmImage from './TmImage.astro';
+
+interface Props {
+  data: {
+    title: string;
+    img: string;
+  }[];
+  language: AvailableLanguages;
+}
+
+const { data, language } = Astro.props;
+if (language !== 'ES') {
+  data.map((item) => {
+    item.img = '../' + item.img;
+  });
+}
+---
+
+<header>
+  {
+    data.map((item) => {
+      if (item.title === 'band') {
+        return <TmImage classes={item.title} src={item.img} alt={item.title} />;
+      } else if (item.title === 'menu') {
+        return (
+          <>
+            <label for="nav-menu">
+              <TmImage classes={item.title} src={item.img} alt={item.title} />
+            </label>
+          </>
+        );
+      } else {
+        return <TmImage classes={item.title} src={item.img} alt={item.title} />;
+      }
+    })
+  }
+</header>
+
+<style>
+  header {
+    background-color: whitesmoke;
+    border-bottom: 1px solid rgb(50 50 50);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+</style>

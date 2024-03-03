@@ -1,0 +1,71 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { type AvailableLanguages } from 'src/types/language';
+import TmLink from './/TmLink.astro';
+
+interface Props {
+  gigs: string;
+  media: string;
+  news: string;
+  history: string;
+  contact: string;
+}
+
+const { gigs, media, news, history, contact } = Astro.props;
+
+const availableLanguages: { code: AvailableLanguages; name: string }[] = [
+  { code: 'ES', name: 'Español' },
+  { code: 'EN', name: 'English' },
+  { code: 'DE', name: 'Deutsch' },
+  { code: 'FR', name: 'Français' },
+  { code: 'IT', name: 'Italiano' },
+  { code: 'PT', name: 'Português' },
+];
+---
+
+<ul>
+  <li>
+    <label for="nav-menu"><TmLink classes="nav" href="/#gigs" target="_self">{gigs}</TmLink></label>
+  </li>
+  <li>
+    <label for="nav-menu"
+      ><TmLink classes="nav" href="/#media" target="_self">
+        {media}
+      </TmLink></label
+    >
+  </li>
+  <li>
+    <label for="nav-menu"><TmLink classes="nav" href="/#news" target="_self">{news}</TmLink></label>
+  </li>
+  <li>
+    <label for="nav-menu"
+      ><TmLink classes="nav" href="/#history" target="_self">
+        {history}
+      </TmLink></label
+    >
+  </li>
+  <li>
+    <label for="nav-menu"
+      ><TmLink classes="nav" href="/#contact" target="_self">
+        {contact}
+      </TmLink></label
+    >
+  </li>
+</ul>
+
+<select>
+  {availableLanguages.map((lang) => <option>{lang.name}</option>)}
+</select>
+
+<style>
+  ul {
+    margin-top: 35px;
+    padding-inline-start: 0;
+    list-style-type: none;
+  }
+
+  li {
+    margin-bottom: 40px;
+    text-align: center;
+  }
+</style>

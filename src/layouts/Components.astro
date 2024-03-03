@@ -1,0 +1,63 @@
+---
+import type { AvailableLanguages, AvailableLocales } from 'src/types/language';
+interface Props {
+  language: AvailableLanguages;
+  locale: AvailableLocales;
+}
+
+const { language, locale } = Astro.props;
+
+// ASTRO COMPONENTS
+import TmHeaderIcons from '../components/TmHeaderIcons.astro';
+import TmContent from '../components/TmContent.astro';
+import TmSection from '../components/TmSection.astro';
+import TmGigs from '../components/TmGigs.astro';
+import TmMedia from '../components/TmMedia.astro';
+import TmNews from '../components/TmNews.astro';
+import TmHistory from '../components/TmHistory.astro';
+import TmContact from '../components/TmContact.astro';
+import TmFooter from '../components/TmFooter.astro';
+import TmFooterIcons from '../components/TmFooterIcons.astro';
+import TmCopy from '../components/TmCopy.astro';
+
+// CONSTANTS
+import { CONTACT, FOOTER_ICONS, HEADER_ICONS } from '../locales/commonData';
+
+// DICTIONARY
+import { getDictionary } from '../locales/getDictionary';
+const dictionary = getDictionary(language);
+---
+
+<TmHeaderIcons data={HEADER_ICONS} language={language} />
+<TmContent
+  gigs={dictionary.Common.gigsTitle}
+  media={dictionary.Common.mediaTitle}
+  news={dictionary.Common.newsTitle}
+  history={dictionary.History.title}
+  contact={dictionary.Contact.title}
+>
+  <TmSection id="gigs">
+    <TmGigs
+      data={dictionary.Common.gigsTitle}
+      upcomingGigsTitle={dictionary.Common.upcomingGigs}
+      pastGigsTitle={dictionary.Common.pastGigs}
+      locale={locale}
+    />
+  </TmSection>
+  <TmSection id="media">
+    <TmMedia data={dictionary.Common.mediaTitle} />
+  </TmSection>
+  <TmSection id="news">
+    <TmNews data={dictionary.Common.newsTitle} language={language} locale={locale} />
+  </TmSection>
+  <TmSection id="history">
+    <TmHistory dictionary={dictionary.History} />
+  </TmSection>
+  <TmSection id="contact">
+    <TmContact dictionary={dictionary.Contact} constants={CONTACT} />
+  </TmSection>
+</TmContent>
+<TmFooter>
+  <TmFooterIcons data={FOOTER_ICONS} language={language} />
+  <TmCopy data={dictionary.Common.copy} />
+</TmFooter>

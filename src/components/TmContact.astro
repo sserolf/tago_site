@@ -1,0 +1,50 @@
+---
+import TmTitle from './TmTitle.astro';
+import TmText from './TmText.astro';
+import TmLink from './TmLink.astro';
+
+interface Props {
+  dictionary: {
+    title: string;
+    mailTitle: string;
+  };
+  constants: {
+    mailText: string;
+    mailUrl: string;
+    instagramTitle: string;
+    instagramText: string;
+    instagramUrl: string;
+  };
+}
+
+const { dictionary, constants } = Astro.props;
+---
+
+<TmTitle title={dictionary.title} />
+<div class="container">
+  <div class="column">
+    <TmText text={dictionary.mailTitle + ':'} />
+    <TmLink classes="contact" href={constants.mailUrl}>
+      <TmText text={constants.mailText} />
+    </TmLink>
+  </div>
+  <div class="column">
+    <TmText text={constants.instagramTitle + ':'} />
+    <TmLink classes="contact" href={constants.instagramUrl}>
+      <TmText text={constants.instagramText} />
+    </TmLink>
+  </div>
+</div>
+
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .column {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0;
+  }
+</style>

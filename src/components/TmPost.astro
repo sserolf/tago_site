@@ -1,0 +1,67 @@
+---
+import TmLink from './TmLink.astro';
+const { locale, timestamp, permalink, media, caption, type, title } = Astro.props;
+import type { ChildrenDatum } from '../types/posts';
+let carousel: ChildrenDatum[] = [],
+  video,
+  image;
+if (type === 'CAROUSEL_ALBUM') {
+  carousel = media as ChildrenDatum[];
+} else if (type === 'VIDEO') {
+  video = media;
+} else {
+  image = media;
+}
+
+const formattedDate: Date = new Date(timestamp);
+const formattedLocaleDate = formattedDate.toLocaleDateString(locale.replace('_', '-'), {
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+});
+---
+
+{
+  permalink && (
+    <TmLink classes="igPost" href={permalink}>
+      {formattedLocaleDate} IG POST
+    </TmLink>
+  )
+}
+{title && <span class="igPost">{`${formattedLocaleDate} - ${title}`}</span>}
+{!permalink && !title && <span class="igPost">{formattedLocaleDate}</span>}
+<p>{caption}</p>
+{image && <img src={image} alt={title} />}
+{video && <video src={video} controls />}
+{
+  carousel &&
+    carousel.map((carouselItem: ChildrenDatum) => {
+      if (carouselItem.media_type === 'VIDEO') {
+        return <video src={carouselItem.media_url} controls />;
+      } else if (carouselItem.media_type === 'IMAGE') {
+        return <img src={carouselItem.media_url} alt={title} />;
+      }
+      return null;
+    })
+}
+
+<style>
+  img {
+    width: 100%;
+    aspect-ratio: auto;
+  }
+
+  p {
+    white-space: pre-line;
+  }
+
+  video {
+    width: 100%;
+    aspect-ratio: auto;
+  }
+
+  .igPost {
+    color: purple;
+    font-weight: bold;
+  }
+</style>

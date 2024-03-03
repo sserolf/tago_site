@@ -1,0 +1,17 @@
+---
+const { dictionary } = Astro.props;
+---
+
+<h1>{dictionary.title}</h1>
+<p>{dictionary.text}</p>
+
+<style>
+  h1 {
+    text-align: center;
+  }
+
+  p {
+    white-space: pre-line;
+    text-align: justify;
+  }
+</style>

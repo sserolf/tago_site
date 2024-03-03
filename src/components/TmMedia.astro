@@ -1,0 +1,164 @@
+---
+const { data } = Astro.props;
+---
+
+<!-- <script>
+  const elementIsVisibleInViewport = (el: HTMLElement) => {
+    const { top, left, bottom, right } = el.getBoundingClientRect();
+    const { innerHeight, innerWidth } = window;
+    return top >= 0 && left >= 0 && bottom <= innerHeight && right <= innerWidth;
+  };
+
+  const checkIfVisible = () => {
+    if (!elementIsVisibleInViewport(document.querySelector('audio') as HTMLElement)) {
+      console.log('Not visible');
+      (document.querySelector('main') as HTMLElement).removeEventListener('scroll', checkIfVisible);
+    }
+  };
+  (document.querySelector('audio') as HTMLElement).onplaying = () => {
+    (document.querySelector('main') as HTMLElement).addEventListener('scroll', checkIfVisible);
+  };
+  (document.querySelector('audio') as HTMLElement).onplay = () => {
+    console.log('Playing');
+  };
+  (document.querySelector('audio') as HTMLElement).onpause = () => {
+    console.log('Paused');
+  };
+  (document.querySelector('audio') as HTMLElement).onended = () => {
+    console.log('Ended');
+  };
+</script>
+<script type="text/javascript">
+  const switchAudio = () => {
+    const audio = document.querySelector('audio');
+    if (audio.paused) {
+      audio.play();
+      playButton.innerHTML = 'PAUSE';
+      nowPlaying.innerHTML = 'NOW PLAYING...';
+      nowPlaying.classList.add('blink');
+      songTitle.innerHTML = 'My Way';
+      if (songTitle.clientWidth > songTitleHolder.clientWidth) songTitle.classList.add('slide');
+      currentTime.innerHTML = '0:00 /';
+      totalDuration.innerHTML = formatTime(audio.duration);
+    } else {
+      audio.pause();
+      playButton.innerHTML = 'PLAY';
+      nowPlaying.innerHTML = '';
+      songTitle.innerHTML = '';
+      songTitle.classList.remove('slide');
+      currentTime.innerHTML = '';
+      totalDuration.innerHTML = '';
+    }
+  };
+
+  // const changeSong = (name) => {
+  //   const audio = document.querySelector('audio');
+  //   if (audio.played) switchAudio();
+  //   songTitle.innerHTML = name;
+  //   if (songTitle.clientWidth > songTitleHolder.clientWidth) songTitle.classList.add('slide');
+  //   currentTime.innerHTML = '0:00 /';
+  //   totalDuration.innerHTML = formatTime(audio.duration);
+  // };
+
+  const updateTrackTime = (audio) => {
+    if (!audio.paused) currentTime.innerHTML = formatTime(audio.currentTime) + ' /';
+  };
+
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  };
+</script> -->
+<audio ontimeupdate="updateTrackTime(this)">
+  <!-- <source src="media/my_way_midi.mp3" type="audio/mpeg" /> -->
+  <!-- Your browser does not support the audio element. -->
+</audio>
+<fieldset>
+  <legend>{data}</legend>
+  <div class="row">
+    <button id="playButton" onclick="switchAudio()">PLAY</button>
+    <span id="nowPlaying"></span>
+  </div>
+  <div class="row">
+    <div id="songTitleHolder">
+      <div id="songTitle"></div>
+    </div>
+    <div>
+      <span id="currentTime"></span>
+      <span id="totalDuration"></span>
+    </div>
+  </div>
+</fieldset>
+
+<style>
+  button {
+    width: 100px;
+    background: whitesmoke;
+    border: 1px solid black;
+    border-radius: 5px;
+    box-shadow: grey 2px 2px 2px 0px;
+    font-family: monospace;
+    font-size: inherit;
+  }
+
+  fieldset {
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0;
+    height: 100px;
+    border-radius: 10px;
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  legend {
+    padding: 0 10px;
+    font-size: x-large;
+    font-weight: bold;
+  }
+
+  .blink {
+    animation: blink-animation 1.5s steps(2, start) infinite;
+  }
+
+  .row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 10px 0;
+  }
+
+  #songTitleHolder {
+    overflow: hidden;
+    width: 120px;
+    text-wrap: nowrap;
+  }
+
+  #songTitle {
+    font-style: italic;
+    width: fit-content;
+  }
+
+  .slide {
+    animation: slide 10s cubic-bezier(0.25, 0, 0.9, 1) infinite;
+  }
+
+  @keyframes slide {
+    0% {
+      transform: translateX(10%);
+    }
+
+    100% {
+      transform: translateX(-105%);
+    }
+  }
+
+  @keyframes blink-animation {
+    to {
+      visibility: hidden;
+    }
+  }
+</style>

@@ -1,0 +1,14 @@
+---
+import TmPosts from './TmPosts.astro';
+
+const { data, locale, language } = Astro.props;
+---
+
+<h1>{data}</h1>
+<TmPosts locale={locale} language={language} />
+
+<style>
+  h1 {
+    text-align: center;
+  }
+</style>

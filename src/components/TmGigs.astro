@@ -1,0 +1,77 @@
+---
+const { data, pastGigsTitle, upcomingGigsTitle, locale } = Astro.props;
+import gigs from './../json/gigs.json';
+import TmPastGigs from './TmPastGigs.astro';
+import TmUpcomingGigs from './TmUpcomingGigs.astro';
+let pastGigs: (
+    | { date: string; name: string; url?: string }
+    | { date: string; name: string; url: string }
+  )[] = [],
+  upcomingGigs: (
+    | { date: string; name: string; url?: undefined }
+    | { date: string; name: string; url: string }
+  )[] = [];
+{
+  gigs.map((gig) => {
+    const dateString = gig.date;
+    const dateParts = dateString.split('/');
+    const date = new Date();
+    date.setDate(Number(dateParts[0]));
+    date.setMonth(Number(dateParts[1]) - 1);
+    date.setFullYear(Number(dateParts[2]));
+
+    date < new Date() ? pastGigs.push(gig) : upcomingGigs.push(gig);
+  });
+}
+---
+
+<h1>{data}</h1>
+{upcomingGigs.length === 0 && pastGigs.length === 0 && <p>No gigs found</p>}
+{
+  upcomingGigs.length !== 0 && (
+    <div>
+      <h3>{upcomingGigsTitle}</h3>
+      <ul>
+        <TmUpcomingGigs data={upcomingGigs} locale={locale} />
+      </ul>
+    </div>
+  )
+}
+{
+  pastGigs.length !== 0 && (
+    <div>
+      <h3>{pastGigsTitle}</h3>
+      <ul>
+        <TmPastGigs data={pastGigs} locale={locale} />
+      </ul>
+    </div>
+  )
+}
+
+<style>
+  a {
+    color: darkblue;
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  h3 {
+    text-align: center;
+  }
+
+  p {
+    text-align: center;
+  }
+
+  div:last-child {
+    border-radius: 10px;
+    background-color: lightgrey;
+    padding: 10px 10px;
+  }
+
+  ul {
+    padding: 0;
+  }
+</style>

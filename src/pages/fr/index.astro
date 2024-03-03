@@ -1,0 +1,24 @@
+---
+// LAYOUTS
+import Layout from '../../layouts/Layout.astro';
+import Components from '../../layouts/Components.astro';
+
+// TYPES
+import type { AvailableLanguages, AvailableLocales } from '../../types/language';
+
+// LANGUAGE COOKIE ONLY FOR SSR
+// const cookieLanguage: AvailableLanguages = localStorage
+//   .get('language')
+//   ?.value.toUpperCase() as AvailableLanguages;
+
+// LANGUAGE
+const language: AvailableLanguages = 'FR' as AvailableLanguages;
+
+// LOCALE
+import { getLocale } from '../../locales/getLocale';
+const locale: AvailableLocales = getLocale(language);
+---
+
+<Layout language={language} locale={locale}>
+  <Components language={language} locale={locale} />
+</Layout>

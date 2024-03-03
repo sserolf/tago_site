@@ -1,0 +1,25 @@
+---
+interface Props {
+  data: string;
+}
+
+const { data } = Astro.props;
+---
+
+<div>
+  <p>{data}</p>
+</div>
+
+<style>
+  div {
+    background-color: whitesmoke;
+    height: 20px;
+    width: 100%;
+  }
+  p {
+    font-size: 12px;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    text-align: center;
+  }
+</style>

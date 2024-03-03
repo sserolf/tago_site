@@ -1,0 +1,132 @@
+---
+import { HEAD } from './../locales/commonData';
+import { getDictionary } from './../locales/getDictionary';
+import type { AvailableLanguages, AvailableLocales } from './../types/language';
+import { ViewTransitions } from 'astro:transitions';
+
+interface Props {
+  language: AvailableLanguages;
+  locale: AvailableLocales;
+}
+
+const { language, locale } = Astro.props;
+const dictionary = getDictionary(language);
+---
+
+<!doctype html>
+<html lang={language.toLowerCase()}>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <link rel="stylesheet" href="css/css.css"> -->
+    <!-- <script src="js/js.js"></script> -->
+    <link rel="icon" href={HEAD.favicon} />
+    <meta name="generator" content={Astro.generator} />
+    <meta charset="UTF-8" />
+    <title>{HEAD.title}</title>
+    <!-- Search Engine -->
+    <meta name="description" content={dictionary.Head.description} />
+    <meta name="image" content={HEAD.img} />
+    <!-- Schema.org for Google -->
+    <meta itemprop="name" content={HEAD.title} />
+    <meta itemprop="description" content={dictionary.Head.description} />
+    <meta itemprop="image" content={HEAD.img} />
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={HEAD.title} />
+    <meta name="twitter:description" content={dictionary.Head.description} />
+    <meta name="twitter:image:src" content={HEAD.img} />
+    <!-- Open Graph general (Facebook, Pinterest & Google+) -->
+    <meta name="og:title" content={HEAD.title} />
+    <meta name="og:description" content={dictionary.Head.description} />
+    <meta name="og:image" content={HEAD.img} />
+    <meta name="og:url" content={HEAD.url} />
+    <meta name="og:site_name" content={HEAD.title} />
+    <meta name="og:locale" content={locale} />
+    <meta name="og:type" content="website" />
+    <!-- /META -->
+    <style>
+      html,
+      body {
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+      }
+      body {
+        margin: 0;
+        font-family: monospace;
+        font-size: 15px;
+        background: pink;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        scrollbar-width: none;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+        align-items: center;
+        animation: backgroundAnimation 60s infinite;
+      }
+
+      @keyframes backgroundAnimation {
+        0% {
+          background-color: whitesmoke;
+        }
+        10% {
+          background-color: lightsteelblue;
+        }
+        20% {
+          background-color: mediumpurple;
+        }
+        30% {
+          background-color: mediumslateblue;
+        }
+        40% {
+          background-color: slateblue;
+        }
+        50% {
+          background-color: blueviolet;
+        }
+        60% {
+          background-color: slateblue;
+        }
+        70% {
+          background-color: mediumslateblue;
+        }
+        80% {
+          background-color: mediumpurple;
+        }
+        90% {
+          background-color: lightsteelblue;
+        }
+        100% {
+          background-color: whitesmoke;
+        }
+      }
+    </style>
+    <!-- <script type="text/javascript">
+      const handleNavClick = () => {
+        document.querySelector('body').onclick = (event) => {
+          if (
+            document.querySelector('input').checked &&
+            event.target !== document.querySelector('input')
+          ) {
+            if (
+              event?.target?.tagName !== 'NAV' &&
+              event?.target?.tagName !== 'UL' &&
+              event?.target?.tagName !== 'LI' &&
+              event?.target !== document.getElementsByClassName('menu')[0]
+            ) {
+              document.querySelector('input').checked = false;
+            }
+          }
+        };
+      };
+      document.addEventListener('DOMContentLoaded', handleNavClick);
+      navigation.addEventListener('navigate', handleNavClick);
+    </script> -->
+    <ViewTransitions />
+  </head>
+  <body id="body">
+    <slot />
+  </body>
+</html>

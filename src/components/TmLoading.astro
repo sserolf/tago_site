@@ -1,0 +1,57 @@
+---
+
+---
+
+<!-- <script type="text/javascript">
+  const hideLoading = () => {
+    setTimeout(() => {
+      document.getElementById('loading')?.classList.add('hidden');
+      setTimeout(() => {
+        let loadingDisplay = window.getComputedStyle(
+          document.getElementById('loading'),
+          null,
+        ).display;
+        if (loadingDisplay === 'block') document.getElementById('loading').style.display = 'none';
+      }, 1001);
+    }, 1000);
+  };
+  window.addEventListener('load', hideLoading);
+  navigation.addEventListener('navigate', hideLoading);
+</script> -->
+<div id="loading"><img src="assets/images/compressed/fatmusik.webp" /></div>
+
+<style>
+  div {
+    position: absolute;
+    background: white;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .hidden {
+    animation: fade-out 1s forwards;
+  }
+
+  @keyframes fade-out {
+    to {
+      opacity: 0;
+      display: none;
+    }
+  }
+
+  img {
+    display: block;
+    margin: 0 auto;
+    padding: 0;
+    width: 111%;
+    max-width: 675px;
+    transform: translateY(125px);
+  }
+</style>

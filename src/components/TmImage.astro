@@ -1,0 +1,35 @@
+---
+interface Props {
+  classes?: string;
+  src: string;
+  alt?: string;
+  width?: string;
+}
+
+const { classes, src, alt, width } = Astro.props;
+---
+
+<img class={classes} src={src} alt={alt} width={width} />
+
+<style>
+  .band {
+    height: 67.5px;
+    width: 67.5px;
+    margin: 2px 0;
+  }
+
+  .fatmusik {
+    height: 50px;
+    width: 50px;
+  }
+
+  .menu {
+    height: 64px;
+    width: 64px;
+    cursor: pointer;
+  }
+
+  .socialItem {
+    height: 70px;
+  }
+</style>

@@ -1,0 +1,22 @@
+---
+interface Props {
+  id?: string;
+}
+
+const { id } = Astro.props;
+---
+
+<section id={id}><slot /></section>
+
+<style>
+  section {
+    background-color: rgb(255 255 255 / 80%);
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+
+  section:last-child {
+    margin-bottom: 0;
+  }
+</style>

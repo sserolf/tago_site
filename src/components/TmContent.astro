@@ -1,0 +1,63 @@
+---
+import TmNav from './TmNav.astro';
+
+interface Props {
+  gigs: string;
+  media: string;
+  news: string;
+  history: string;
+  contact: string;
+}
+
+const { gigs, media, news, history, contact } = Astro.props;
+---
+
+<main>
+  <input type="checkbox" id="nav-menu" />
+  <nav>
+    <TmNav gigs={gigs} media={media} news={news} history={history} contact={contact} />
+  </nav>
+  <slot />
+</main>
+
+<style>
+  main {
+    scrollbar-width: none;
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 3px;
+    margin: 10px 10px;
+    overflow: scroll;
+    padding: 10px;
+    scroll-behavior: smooth;
+    max-width: 600px;
+    width: calc(100% - 40px);
+  }
+
+  main:has(#nav-menu:checked) {
+    overflow: hidden;
+  }
+
+  input {
+    display: none;
+  }
+
+  nav {
+    height: calc(100% - 164px);
+    width: 80%;
+    transform: translateX(-100%);
+    position: absolute;
+    z-index: 1;
+    top: 73px;
+    left: 0;
+    background-color: lightgrey;
+    overflow: hidden;
+    transition: 0.5s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #nav-menu:checked ~ nav {
+    transform: translateX(0%);
+  }
+</style>
