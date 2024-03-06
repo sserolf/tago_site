@@ -23,3 +23,6 @@ lit-plugin.log*
 
 # ig images
 to_compress/ig/
+
+# ig posts
+public/json/igPosts.json

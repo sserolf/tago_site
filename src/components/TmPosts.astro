@@ -3,55 +3,15 @@
 import TmPost from './TmPost.astro';
 
 // IMPORT TYPES
-import { type MediaDatum } from '../types/posts';
+import { type MediaDatum } from './../types/posts';
 
-// IMPORT SERVICES
-import { getIgPostsData } from '../services/igPosts';
+// IMPORT ALL POSTS
+import allPosts from './../../public/json/igPosts.json';
 const igPostsLimit = 4;
-const igPosts = (await getIgPostsData('', igPostsLimit)) as MediaDatum[];
-
-// IMPORT MANUAL NEWS
-import json from '../json/manualNews.json';
-const manualNews: MediaDatum[] = json as MediaDatum[];
-
-// CREATE TOTAL POSTS ARRAY
-const totalPosts: MediaDatum[] = [];
+const totalPosts: MediaDatum[] = allPosts.slice(0, igPostsLimit) as MediaDatum[];
 
 // GET ASTRO PROPS
 const { locale, language } = Astro.props;
-
-// COMBINE IG POSTS AND MANUAL NEWS
-igPosts.map((post) => {
-  if (post.media_type === 'IMAGE') {
-    post.media_url = `assets/images/compressed/${post.id}.webp`;
-    if (language !== 'ES') {
-      post.media_url = '../' + post.media_url;
-    }
-  } else if (post.media_type === 'CAROUSEL_ALBUM') {
-    post.children?.data.map((child) => {
-      child.media_url = `assets/images/compressed/${child.id}.webp`;
-      if (language !== 'ES') {
-        child.media_url = '../' + child.media_url;
-      }
-    });
-  }
-  totalPosts.push(post);
-});
-
-// FORMAT MANUAL NEWS DATES
-manualNews.map((post) => {
-  const day = post.timestamp.split('/')[0];
-  const month = post.timestamp.split('/')[1];
-  const year = post.timestamp.split('/')[2];
-  post.timestamp = new Date(`${year}-${month}-${day}`).toString();
-  if (language !== 'ES' && post.media_url !== undefined) {
-    post.media_url = '../' + post.media_url;
-  }
-  totalPosts.push(post);
-});
-
-// SORT TOTAL POSTS BY DATE
-totalPosts.sort((a, b) => Number(new Date(b.timestamp)) - Number(new Date(a.timestamp)));
 
 // IMPORT DICTIONARY
 import { getDictionary } from '../locales/getDictionary';
@@ -119,7 +79,11 @@ const dictionary = getDictionary(language);
 
   const createSpanElement = (post) => {
     const span = document.createElement('span');
-    span.innerText = `${new Date(post.timestamp).toLocaleDateString()} - ${post.title}`;
+    const timestamp = new Date(post.timestamp).toLocaleDateString();
+    const title = post.title;
+    const separator = title !== '' ? ' - ' : '';
+    span.innerText = `${timestamp}${separator}${title}`;
+    span.innerText = `${new Date(post.timestamp).toLocaleDateString()} ${separator} ${post.title}`;
     span.style.color = 'black';
     span.style.fontWeight = 'bold';
     return span;
@@ -228,12 +192,22 @@ const dictionary = getDictionary(language);
   };
 
   const getJsonPosts = async () => {
-    const jsonPath = location.pathname.length > 1 ? '../json/igPosts.json' : 'json/igPosts.json';
-    const response = await fetch(jsonPath);
-    const data = await response.json();
+    let data;
+    if (localStorage.getItem('igPosts')) {
+      data = JSON.parse(localStorage.getItem('igPosts'));
+    } else {
+      const jsonPath = location.pathname.length > 1 ? '../json/igPosts.json' : 'json/igPosts.json';
+      const response = await fetch(jsonPath);
+      data = await response.json();
+      localStorage.setItem('igPosts', JSON.stringify(data));
+    }
     const posts = document.getElementsByClassName('post');
     const dataToAppend = data.slice(posts.length, posts.length + 4);
     return { posts: dataToAppend, length: data.length };
+  };
+
+  window.onbeforeunload = () => {
+    localStorage.removeItem('igPosts');
   };
 
   const removePosts = () => {
