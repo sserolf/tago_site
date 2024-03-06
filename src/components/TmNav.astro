@@ -59,7 +59,7 @@ const availableLanguages: { code: AvailableLanguages; name: string; flag: string
 </script>
 
 <select
-  onchange="location.pathname = this.value.toLowerCase() !== 'es' ? this.value.toLowerCase() : ''"
+  onchange="location.pathname = this.value.toLowerCase() !== 'es' ? `${this.value.toLowerCase()}/` : ''"
 >
   {
     availableLanguages.map((lang) =>
