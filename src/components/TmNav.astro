@@ -8,9 +8,10 @@ interface Props {
   news: string;
   history: string;
   contact: string;
+  language: AvailableLanguages;
 }
 
-const { gigs, media, news, history, contact } = Astro.props;
+const { gigs, media, news, history, contact, language } = Astro.props;
 
 const availableLanguages: { code: AvailableLanguages; name: string; flag: string }[] = [
   { code: 'ES', name: 'Español', flag: '\u{1F1EA}\u{1F1F8}' },
@@ -52,13 +53,26 @@ const availableLanguages: { code: AvailableLanguages; name: string; flag: string
   </li>
 </ul>
 
-<select onchange="location.pathname = this.value.toLowerCase()">
+<script is:inline defer>
+  const pathname = location.pathname;
+  pathname === 'tago_site';
+</script>
+
+<select
+  onchange="location.pathname = this.value.toLowerCase() !== 'es' ? this.value.toLowerCase() : ''"
+>
   {
-    availableLanguages.map((lang) => (
-      <option value={lang.code}>
-        {lang.flag} {lang.name}
-      </option>
-    ))
+    availableLanguages.map((lang) =>
+      language.toLowerCase() === lang.code ? (
+        <option value={lang.code} selected>
+          {lang.flag} {lang.name}
+        </option>
+      ) : (
+        <option value={lang.code}>
+          {lang.flag} {lang.name}
+        </option>
+      ),
+    )
   }
 </select>
 

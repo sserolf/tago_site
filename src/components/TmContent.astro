@@ -1,4 +1,5 @@
 ---
+import type { AvailableLanguages } from 'src/types/language';
 import TmNav from './TmNav.astro';
 
 interface Props {
@@ -7,15 +8,23 @@ interface Props {
   news: string;
   history: string;
   contact: string;
+  language: AvailableLanguages;
 }
 
-const { gigs, media, news, history, contact } = Astro.props;
+const { gigs, media, news, history, contact, language } = Astro.props;
 ---
 
 <main>
   <input type="checkbox" id="nav-menu" />
   <nav>
-    <TmNav gigs={gigs} media={media} news={news} history={history} contact={contact} />
+    <TmNav
+      gigs={gigs}
+      media={media}
+      news={news}
+      history={history}
+      contact={contact}
+      language={language}
+    />
   </nav>
   <slot />
 </main>
