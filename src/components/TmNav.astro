@@ -63,7 +63,7 @@ const availableLanguages: { code: AvailableLanguages; name: string; flag: string
 >
   {
     availableLanguages.map((lang) =>
-      language.toLowerCase() === lang.code ? (
+      language === lang.code ? (
         <option value={lang.code} selected>
           {lang.flag} {lang.name}
         </option>

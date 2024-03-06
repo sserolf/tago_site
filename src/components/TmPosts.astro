@@ -97,7 +97,7 @@ const dictionary = getDictionary(language);
 
   const createImgElement = (post) => {
     const img = document.createElement('img');
-    img.src = post.media_url;
+    location.pathname.length > 1 ? (img.src = `../${post.media_url}`) : (img.src = post.media_url);
     img.alt = post.id;
     img.style.width = '100%';
     return img;
