@@ -1,5 +1,4 @@
 ---
-import { getRelativeLocaleUrl } from 'astro:i18n';
 import { type AvailableLanguages } from 'src/types/language';
 import TmLink from './/TmLink.astro';
 
@@ -13,13 +12,13 @@ interface Props {
 
 const { gigs, media, news, history, contact } = Astro.props;
 
-const availableLanguages: { code: AvailableLanguages; name: string }[] = [
-  { code: 'ES', name: 'Español' },
-  { code: 'EN', name: 'English' },
-  { code: 'DE', name: 'Deutsch' },
-  { code: 'FR', name: 'Français' },
-  { code: 'IT', name: 'Italiano' },
-  { code: 'PT', name: 'Português' },
+const availableLanguages: { code: AvailableLanguages; name: string; flag: string }[] = [
+  { code: 'ES', name: 'Español', flag: '\u{1F1EA}\u{1F1F8}' },
+  { code: 'EN', name: 'English', flag: '\u{1F1EC}\u{1F1E7}' },
+  { code: 'DE', name: 'Deutsch', flag: '\u{1F1E9}\u{1F1EA}' },
+  { code: 'FR', name: 'Français', flag: '\u{1F1EB}\u{1F1F7}' },
+  { code: 'IT', name: 'Italiano', flag: '\u{1F1EE}\u{1F1F9}' },
+  { code: 'PT', name: 'Português', flag: '\u{1F1F5}\u{1F1F9}' },
 ];
 ---
 
@@ -53,8 +52,14 @@ const availableLanguages: { code: AvailableLanguages; name: string }[] = [
   </li>
 </ul>
 
-<select>
-  {availableLanguages.map((lang) => <option>{lang.name}</option>)}
+<select onchange="location.pathname = this.value.toLowerCase()">
+  {
+    availableLanguages.map((lang) => (
+      <option value={lang.code}>
+        {lang.flag} {lang.name}
+      </option>
+    ))
+  }
 </select>
 
 <style>
