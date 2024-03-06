@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "npm run save-json-and-download-images && npm run img-transform && astro check && astro build",
-    "save-json-and-download-images": "node ./scripts/saveJsonAndDownloadImages.js",
+    "save-json-and-download-images": "node ./scripts/saveJsonAndDownloadImages.js access_token=$IG_ACCESS_TOKEN",
     "img-transform": "node ./scripts/imgTransform.js"
   },
   "dependencies": {

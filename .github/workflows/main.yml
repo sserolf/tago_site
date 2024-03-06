@@ -1,0 +1,26 @@
+name: Build and Deploy
+on:
+  schedule:
+    - cron:  '*/30 * * * *'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout 🛎️
+      uses: actions/checkout@v2.3.1
+
+    - name: Install and Build 🔧
+      run: |
+        npm install
+        npm run build
+      env:
+        IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+
+    - name: Deploy 🚀
+      uses: JamesIves/github-pages-deploy-action@4.1.5
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BRANCH: gh-pages
+        FOLDER: dist
+
