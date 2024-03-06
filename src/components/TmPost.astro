@@ -1,6 +1,6 @@
 ---
 import TmLink from './TmLink.astro';
-const { locale, timestamp, permalink, media, caption, type, title } = Astro.props;
+const { locale, timestamp, permalink, media, caption, type, title, language } = Astro.props;
 import type { ChildrenDatum } from '../types/posts';
 let carousel: ChildrenDatum[] = [],
   video,
@@ -10,7 +10,9 @@ if (type === 'CAROUSEL_ALBUM') {
 } else if (type === 'VIDEO') {
   video = media;
 } else {
-  image = media;
+  let imagePath = media;
+  if (language !== 'ES') imagePath = `../${imagePath}`;
+  image = imagePath;
 }
 
 const formattedDate: Date = new Date(timestamp);
@@ -39,7 +41,9 @@ const formattedLocaleDate = formattedDate.toLocaleDateString(locale.replace('_',
       if (carouselItem.media_type === 'VIDEO') {
         return <video src={carouselItem.media_url} controls />;
       } else if (carouselItem.media_type === 'IMAGE') {
-        return <img src={carouselItem.media_url} alt={title} />;
+        let imagePath = carouselItem.media_url;
+        if (language !== 'ES') imagePath = `../${imagePath}`;
+        return <img src={imagePath} alt={title} />;
       }
       return null;
     })
