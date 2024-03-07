@@ -1,6 +1,6 @@
 ---
 import TmLink from './TmLink.astro';
-const { locale, timestamp, permalink, media, caption, type, title, aspect_ratio, language } =
+const { locale, timestamp, permalink, media, caption, type, id, title, aspect_ratio, language } =
   Astro.props;
 import type { ChildrenDatum } from '../types/posts';
 let carousel: ChildrenDatum[] = [],
@@ -36,7 +36,15 @@ const formattedLocaleDate = formattedDate.toLocaleDateString(locale.replace('_',
 {title && <span class="igPost">{`${formattedLocaleDate} - ${title}`}</span>}
 {!permalink && !title && <span class="igPost">{formattedLocaleDate}</span>}
 <p>{caption}</p>
-{image && <img style={formatAspectRatio(aspect_ratio)} src={image} alt={title} />}
+{
+  image && (
+    <img
+      style={formatAspectRatio(aspect_ratio)}
+      src={image}
+      alt={title ? title : id ? id : 'alt'}
+    />
+  )
+}
 {video && <video src={video} controls />}
 {
   carousel &&
@@ -50,7 +58,7 @@ const formattedLocaleDate = formattedDate.toLocaleDateString(locale.replace('_',
           <img
             style={carouselItem.aspect_ratio && formatAspectRatio(carouselItem.aspect_ratio)}
             src={imagePath}
-            alt={title}
+            alt={carouselItem.id ? carouselItem.id : 'alt'}
           />
         );
       }
