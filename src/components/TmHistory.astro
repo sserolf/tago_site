@@ -2,12 +2,19 @@
 const { dictionary } = Astro.props;
 ---
 
-<h1>{dictionary.title}</h1>
+<span class="title section">{dictionary.title}</span>
 <p>{dictionary.text}</p>
 
 <style>
-  h1 {
+  .title {
+    display: block;
     text-align: center;
+    font-weight: bold;
+  }
+
+  .section {
+    font-size: 1.5em;
+    margin: 10px 0;
   }
 
   p {

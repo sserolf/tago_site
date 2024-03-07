@@ -25,12 +25,12 @@ let pastGigs: (
 }
 ---
 
-<h1>{data}</h1>
+<span class="title section">{data}</span>
 {upcomingGigs.length === 0 && pastGigs.length === 0 && <p>No gigs found</p>}
 {
   upcomingGigs.length !== 0 && (
     <div>
-      <h3>{upcomingGigsTitle}</h3>
+      <span class="title gigs">{upcomingGigsTitle}</span>
       <ul>
         <TmUpcomingGigs data={upcomingGigs} locale={locale} />
       </ul>
@@ -40,7 +40,7 @@ let pastGigs: (
 {
   pastGigs.length !== 0 && (
     <div>
-      <h3>{pastGigsTitle}</h3>
+      <span class="title gigs">{pastGigsTitle}</span>
       <ul>
         <TmPastGigs data={pastGigs} locale={locale} />
       </ul>
@@ -53,12 +53,19 @@ let pastGigs: (
     color: darkblue;
   }
 
-  h1 {
+  .title {
+    display: block;
     text-align: center;
+    font-weight: bold;
   }
 
-  h3 {
-    text-align: center;
+  .section {
+    font-size: 1.5em;
+    margin: 10px 0;
+  }
+
+  .gigs {
+    font-size: 1.2em;
   }
 
   p {

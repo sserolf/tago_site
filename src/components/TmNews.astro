@@ -4,11 +4,18 @@ import TmPosts from './TmPosts.astro';
 const { data, locale, language } = Astro.props;
 ---
 
-<h1>{data}</h1>
+<span class="title section">{data}</span>
 <TmPosts locale={locale} language={language} />
 
 <style>
-  h1 {
+  .title {
+    display: block;
     text-align: center;
+    font-weight: bold;
+  }
+
+  .section {
+    font-size: 1.5em;
+    margin: 10px 0;
   }
 </style>
