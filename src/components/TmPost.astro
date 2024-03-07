@@ -33,7 +33,7 @@ const formattedLocaleDate = formattedDate.toLocaleDateString(locale.replace('_',
 {title && <span class="igPost">{`${formattedLocaleDate} - ${title}`}</span>}
 {!permalink && !title && <span class="igPost">{formattedLocaleDate}</span>}
 <p>{caption}</p>
-{image && <img src={image} alt={title} />}
+{image && <img width="100%" height="auto" src={image} alt={title} />}
 {video && <video src={video} controls />}
 {
   carousel &&
@@ -43,18 +43,13 @@ const formattedLocaleDate = formattedDate.toLocaleDateString(locale.replace('_',
       } else if (carouselItem.media_type === 'IMAGE') {
         let imagePath = carouselItem.media_url;
         if (language !== 'ES') imagePath = `../${imagePath}`;
-        return <img src={imagePath} alt={title} />;
+        return <img width="100%" height="auto" src={imagePath} alt={title} />;
       }
       return null;
     })
 }
 
 <style>
-  img {
-    width: 100%;
-    height: auto;
-  }
-
   p {
     white-space: pre-line;
   }
