@@ -15,7 +15,9 @@ if (type === 'CAROUSEL_ALBUM') {
   if (language !== 'ES') imagePath = `../${imagePath}`;
   image = imagePath;
 }
-const formattedAspectRatio = aspect_ratio ? 'aspect-ratio: ' + aspect_ratio : 'auto';
+const formatAspectRatio = (aspect_ratio: string) => {
+  return aspect_ratio ? 'aspect-ratio: ' + aspect_ratio : 'auto';
+};
 const formattedDate: Date = new Date(timestamp);
 const formattedLocaleDate = formattedDate.toLocaleDateString(locale.replace('_', '-'), {
   year: 'numeric',
@@ -34,7 +36,7 @@ const formattedLocaleDate = formattedDate.toLocaleDateString(locale.replace('_',
 {title && <span class="igPost">{`${formattedLocaleDate} - ${title}`}</span>}
 {!permalink && !title && <span class="igPost">{formattedLocaleDate}</span>}
 <p>{caption}</p>
-{image && <img style={formattedAspectRatio} src={image} alt={title} />}
+{image && <img style={formatAspectRatio(aspect_ratio)} src={image} alt={title} />}
 {video && <video src={video} controls />}
 {
   carousel &&
@@ -43,11 +45,14 @@ const formattedLocaleDate = formattedDate.toLocaleDateString(locale.replace('_',
         return <video src={carouselItem.media_url} controls />;
       } else if (carouselItem.media_type === 'IMAGE') {
         let imagePath = carouselItem.media_url;
-        const formattedAspectRatioChild = carouselItem.aspect_ratio
-          ? 'aspect-ratio: ' + carouselItem.aspect_ratio
-          : 'auto';
         if (language !== 'ES') imagePath = `../${imagePath}`;
-        return <img style={formattedAspectRatioChild} src={imagePath} alt={title} />;
+        return (
+          <img
+            style={carouselItem.aspect_ratio && formatAspectRatio(carouselItem.aspect_ratio)}
+            src={imagePath}
+            alt={title}
+          />
+        );
       }
       return null;
     })
