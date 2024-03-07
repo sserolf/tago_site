@@ -32,6 +32,7 @@ const dictionary = getDictionary(language);
             type={post.media_type}
             title={post.title}
             language={language}
+            aspect_ratio={post.aspect_ratio}
           />
         </div>
       );
@@ -48,6 +49,7 @@ const dictionary = getDictionary(language);
               type={post.media_type}
               title={post.title}
               language={language}
+              aspect_ratio={post.aspect_ratio}
             />
           </div>
           <div id="navigationButtons">
@@ -102,6 +104,7 @@ const dictionary = getDictionary(language);
     location.pathname.length > 1 ? (img.src = `../${post.media_url}`) : (img.src = post.media_url);
     img.alt = post.id;
     img.style.width = '100%';
+    img.style.aspectRatio = post.aspect_ratio;
     return img;
   };
 

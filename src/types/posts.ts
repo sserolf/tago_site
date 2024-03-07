@@ -23,6 +23,7 @@ export interface MediaDatum {
   id?: string;
   children?: Children;
   title?: string;
+  aspect_ratio?: string;
 }
 
 export interface Children {
@@ -33,6 +34,7 @@ export interface ChildrenDatum {
   media_url: string;
   media_type: MediaType;
   id: string;
+  aspect_ratio?: string;
 }
 
 export enum MediaType {
