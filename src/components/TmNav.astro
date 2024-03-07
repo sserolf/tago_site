@@ -59,6 +59,7 @@ const availableLanguages: { code: AvailableLanguages; name: string; flag: string
 </script>
 
 <select
+  aria-label="Language"
   onchange="location.pathname = this.value.toLowerCase() !== 'es' ? `${this.value.toLowerCase()}/` : ''"
 >
   {
@@ -77,6 +78,15 @@ const availableLanguages: { code: AvailableLanguages; name: string; flag: string
 </select>
 
 <style>
+  select {
+    width: fit-content;
+    padding: 3px;
+    font-size: 1.2em;
+    font-family: monospace;
+    text-transform: uppercase;
+    border-radius: 10px;
+  }
+
   ul {
     margin-top: 35px;
     padding-inline-start: 0;
