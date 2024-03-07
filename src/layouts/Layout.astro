@@ -64,42 +64,27 @@ const dictionary = getDictionary(language);
         width: 100%;
         overflow: hidden;
         align-items: center;
-        animation: backgroundAnimation 60s infinite;
+        animation: backgroundAnimation 60s infinite alternate;
       }
 
       @keyframes backgroundAnimation {
         0% {
           background-color: #f5f5f5; /* whitesmoke */
         }
-        10% {
+        20% {
           background-color: #b0c4de; /* lightsteelblue */
         }
-        20% {
+        40% {
           background-color: #9370db; /* mediumpurple */
         }
-        30% {
-          background-color: #7b68ee; /* mediumslateblue */
-        }
-        40% {
-          background-color: #6a5acd; /* slateblue */
-        }
-        50% {
-          background-color: #8a2be2; /* blueviolet */
-        }
         60% {
-          background-color: #6a5acd; /* slateblue */
-        }
-        70% {
           background-color: #7b68ee; /* mediumslateblue */
         }
         80% {
-          background-color: #9370db; /* mediumpurple */
-        }
-        90% {
-          background-color: #b0c4de; /* lightsteelblue */
+          background-color: #6a5acd; /* slateblue */
         }
         100% {
-          background-color: #f5f5f5; /* whitesmoke */
+          background-color: #8a2be2; /* blueviolet */
         }
       }
     </style>
