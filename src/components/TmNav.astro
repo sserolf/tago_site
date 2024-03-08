@@ -25,28 +25,61 @@ const availableLanguages: { code: AvailableLanguages; name: string; flag: string
 
 <ul>
   <li>
-    <label for="nav-menu"><TmLink classes="nav" href="/#gigs" target="_self">{gigs}</TmLink></label>
+    <label for="nav-menu"
+      ><TmLink
+        onclick="document.querySelector('input').click()"
+        classes="nav"
+        href={language === 'ES' ? '/#gigs' : `/${language.toLowerCase()}/#gigs`}
+        target="_self"
+      >
+        {gigs}
+      </TmLink></label
+    >
   </li>
   <li>
     <label for="nav-menu"
-      ><TmLink classes="nav" href="/#media" target="_self">
+      ><TmLink
+        onclick="document.querySelector('input').click()"
+        classes="nav"
+        href={language === 'ES' ? '/#media' : `/${language.toLowerCase()}/#media`}
+        target="_self"
+      >
         {media}
       </TmLink></label
     >
   </li>
   <li>
-    <label for="nav-menu"><TmLink classes="nav" href="/#news" target="_self">{news}</TmLink></label>
+    <label for="nav-menu"
+      ><TmLink
+        onclick="document.querySelector('input').click()"
+        classes="nav"
+        href={language === 'ES' ? '/#news' : `/${language.toLowerCase()}/#news`}
+        target="_self"
+      >
+        {news}
+      </TmLink></label
+    >
   </li>
   <li>
     <label for="nav-menu"
-      ><TmLink classes="nav" href="/#history" target="_self">
+      ><TmLink
+        onclick="document.querySelector('input').click()"
+        classes="nav"
+        href={language === 'ES' ? '/#history' : `/${language.toLowerCase()}/#history`}
+        target="_self"
+      >
         {history}
       </TmLink></label
     >
   </li>
   <li>
     <label for="nav-menu"
-      ><TmLink classes="nav" href="/#contact" target="_self">
+      ><TmLink
+        onclick="document.querySelector('input').click()"
+        classes="nav"
+        href={language === 'ES' ? '/#contact' : `/${language.toLowerCase()}/#contact`}
+        target="_self"
+      >
         {contact}
       </TmLink></label
     >
@@ -60,7 +93,7 @@ const availableLanguages: { code: AvailableLanguages; name: string; flag: string
 
 <select
   aria-label="Language"
-  onchange="location.pathname = this.value.toLowerCase() !== 'es' ? `${this.value.toLowerCase()}/` : ''"
+  onchange="location.hash = '', location.pathname = this.value.toLowerCase() !== 'es' ? `${this.value.toLowerCase()}/` : ''"
 >
   {
     availableLanguages.map((lang) =>

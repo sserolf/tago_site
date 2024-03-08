@@ -31,9 +31,9 @@ const sortedData = slicedData.sort((a, b) => {
 ---
 
 {
-  sortedData.map((gig, count) => {
+  sortedData.map((gig) => {
     const formattedDate = formatDate(gig.date);
-    const isLastGig = count === pastGigsLimit - 1;
+    // const isLastGig = count === pastGigsLimit - 1;
 
     return (
       <>

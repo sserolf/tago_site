@@ -3,12 +3,18 @@ interface Props {
   href: string;
   classes?: string;
   target?: string;
+  onclick?: string;
 }
 
-const { href, classes, target } = Astro.props;
+const { href, classes, target, onclick } = Astro.props;
 ---
 
-<a class={classes ? classes : 'normal'} href={href} target={target ? target : '_blank'}><slot /></a>
+<a
+  onclick={onclick}
+  class={classes ? classes : 'normal'}
+  href={href}
+  target={target ? target : '_blank'}><slot /></a
+>
 
 <style>
   a {
