@@ -39,6 +39,7 @@ const formattedLocaleDate = formattedDate.toLocaleDateString(locale.replace('_',
 {
   image && (
     <img
+      loading="lazy"
       style={formatAspectRatio(aspect_ratio)}
       src={image}
       alt={title ? title : id ? id : 'alt'}
@@ -56,6 +57,7 @@ const formattedLocaleDate = formattedDate.toLocaleDateString(locale.replace('_',
         if (language !== 'ES') imagePath = `../${imagePath}`;
         return (
           <img
+            loading="lazy"
             style={carouselItem.aspect_ratio && formatAspectRatio(carouselItem.aspect_ratio)}
             src={imagePath}
             alt={carouselItem.id ? carouselItem.id : 'alt'}

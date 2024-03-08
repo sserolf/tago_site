@@ -9,7 +9,7 @@ interface Props {
 const { classes, src, alt, width } = Astro.props;
 ---
 
-<img class={classes} src={src} alt={alt} width={width} />
+<img loading="lazy" class={classes} src={src} alt={alt} width={width} />
 
 <style>
   .band {

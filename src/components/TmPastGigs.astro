@@ -47,7 +47,6 @@ const sortedData = slicedData.sort((a, b) => {
           )}
           <span>{formattedDate}</span>
         </li>
-        <>{isLastGig && <li></li>}</>
       </>
     );
   })
@@ -56,6 +55,10 @@ const sortedData = slicedData.sort((a, b) => {
 <style>
   a {
     color: darkblue;
+  }
+
+  a:hover {
+    color: #06f;
   }
 
   li {
