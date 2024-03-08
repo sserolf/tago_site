@@ -10,33 +10,34 @@ interface Props {
 
 const { data, locale } = Astro.props;
 
+const pastGigsLimit = 4;
+const slicedData = data.slice(0, pastGigsLimit);
+
 const formatDate = (date: string) => {
-  const dateParts = date.split('/');
-  const newDate = new Date();
-  newDate.setDate(Number(dateParts[0]));
-  newDate.setMonth(Number(dateParts[1]) - 1);
-  newDate.setFullYear(Number(dateParts[2]));
-  return newDate;
+  const [day, month, year] = date.split('/');
+  const newDate = new Date(Number(year), Number(month) - 1, Number(day));
+  return newDate.toLocaleDateString(locale.replace('_', '-'), {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
 };
-const sortedData = data.sort((a, b) => {
+
+const sortedData = slicedData.sort((a, b) => {
   const dateA = new Date(formatDate(a.date));
   const dateB = new Date(formatDate(b.date));
-  return Number(dateB) - Number(dateA);
+  return dateB.getTime() - dateA.getTime();
 });
 ---
 
 {
-  sortedData.map((gig) => {
-    const date = formatDate(gig.date);
-    const formattedDate = date.toLocaleDateString(locale.replace('_', '-'), {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-    });
+  sortedData.map((gig, count) => {
+    const formattedDate = formatDate(gig.date);
+    const isLastGig = count === pastGigsLimit - 1;
 
     return (
-      <li>
-        <>
+      <>
+        <li>
           {gig.url ? (
             <a href={gig.url} target="_blank">
               <span>{gig.name}</span>
@@ -44,9 +45,10 @@ const sortedData = data.sort((a, b) => {
           ) : (
             <span>{gig.name}</span>
           )}
-        </>
-        <span>{formattedDate}</span>
-      </li>
+          <span>{formattedDate}</span>
+        </li>
+        <>{isLastGig && <li></li>}</>
+      </>
     );
   })
 }
@@ -59,6 +61,18 @@ const sortedData = data.sort((a, b) => {
   li {
     display: flex;
     justify-content: space-between;
-    margin: 5px 0;
+    min-height: 48px;
+    align-items: center;
+  }
+
+  button {
+    border-color: black;
+    border-radius: 6px;
+    color: black;
+    font-size: 15px;
+    padding: 10px;
+    width: 80%;
+    margin: 0 auto;
+    cursor: pointer;
   }
 </style>
