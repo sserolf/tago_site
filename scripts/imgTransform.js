@@ -31,7 +31,7 @@ const transformImages = (inputDir, removeFolder) => {
         // Resize and convert image to webp format
         if (fileName === 'logo2') {
           sharp(inputPath)
-            .resize(68, null) // Resize to 500px width, height will adapt
+            .resize(102, null) // Resize to 102px width, height will adapt
             .toFormat('webp')
             .toFile(outputPath, (err, info) => {
               if (err) {
@@ -43,7 +43,7 @@ const transformImages = (inputDir, removeFolder) => {
             });
         } else if (fileName === 'fatmusik') {
           sharp(inputPath, { animated: true })
-            .resize(50, null) // Resize to 50px width, height will adapt
+            .resize(75, null) // Resize to 50px width, height will adapt
             .toFormat('webp')
             .toFile(outputPath, (err) => {
               if (err) {
@@ -52,9 +52,20 @@ const transformImages = (inputDir, removeFolder) => {
                 console.log(`Successfully transformed animated ${file} to webp`);
               }
             });
-        } else if (extension === 'gif' && fileName !== 'fatmusik') {
+        } else if (fileName === 'menu2') {
           sharp(inputPath, { animated: true })
-            .resize(70, null) // Resize to 50px width, height will adapt
+            .resize(96, null) // Resize to 96px width, height will adapt
+            .toFormat('webp')
+            .toFile(outputPath, (err) => {
+              if (err) {
+                console.error(`Error processing ${file}:`, err);
+              } else {
+                console.log(`Successfully transformed animated ${file} to webp`);
+              }
+            });
+        } else if (extension === 'gif' && fileName !== 'fatmusik' && fileName !== 'menu2') {
+          sharp(inputPath, { animated: true })
+            .resize(105, null) // Resize to 105px width, height will adapt
             .toFormat('webp')
             .toFile(outputPath, (err) => {
               if (err) {

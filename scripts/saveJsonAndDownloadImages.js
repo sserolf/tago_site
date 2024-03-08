@@ -39,6 +39,22 @@ const saveJsonAndDownloadImages = async () => {
     }
   };
 
+  const saveJson = () => {
+    const jsonPath = 'public/json';
+    if (!fs.existsSync(jsonPath)) {
+      fs.mkdirSync(jsonPath);
+    } else {
+      fs.rmSync(jsonPath, { recursive: true, force: true });
+      fs.mkdirSync(jsonPath);
+      console.log(`${jsonPath} is deleted and recreated!`);
+    }
+
+    const igPostsData = JSON.stringify(allPosts, null, 2);
+    const filePath = 'public/json/igPosts.json';
+    fs.writeFileSync(filePath, igPostsData);
+    console.log(`${filePath} created successfully!`);
+  };
+
   const changeMediaUrlPathAndAddAspectRatio = async () => {
     for (let i = 0; i < allPosts.length; i++) {
       const post = allPosts[i];
@@ -65,22 +81,6 @@ const saveJsonAndDownloadImages = async () => {
   };
 
   changeMediaUrlPathAndAddAspectRatio();
-
-  const saveJson = () => {
-    const jsonPath = 'public/json';
-    if (!fs.existsSync(jsonPath)) {
-      fs.mkdirSync(jsonPath);
-    } else {
-      fs.rmSync(jsonPath, { recursive: true, force: true });
-      fs.mkdirSync(jsonPath);
-      console.log(`${jsonPath} is deleted and recreated!`);
-    }
-
-    const igPostsData = JSON.stringify(allPosts, null, 2);
-    const filePath = 'public/json/igPosts.json';
-    fs.writeFileSync(filePath, igPostsData);
-    console.log(`${filePath} created successfully!`);
-  };
 };
 
 saveJsonAndDownloadImages();
