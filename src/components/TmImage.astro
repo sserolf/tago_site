@@ -7,9 +7,10 @@ interface Props {
 }
 
 const { classes, src, alt, width } = Astro.props;
+const notLazy = ['band', 'fatmusik', 'menu', 'socialItem'].includes(classes ? classes : '');
 ---
 
-<img loading="lazy" class={classes} src={src} alt={alt} width={width} />
+<img loading={notLazy ? 'eager' : 'lazy'} class={classes} src={src} alt={alt} width={width} />
 
 <style>
   .band {
