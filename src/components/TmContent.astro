@@ -14,7 +14,9 @@ interface Props {
 const { gigs, media, news, history, contact, language } = Astro.props;
 ---
 
-<main>
+<main
+  onclick="document.querySelector('input').checked ? document.querySelector('input').click() : null"
+>
   <input type="checkbox" id="nav-menu" />
   <nav>
     <TmNav
