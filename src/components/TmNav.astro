@@ -25,64 +25,54 @@ const availableLanguages: { code: AvailableLanguages; name: string; flag: string
 
 <ul>
   <li>
-    <label for="nav-menu"
-      ><TmLink
-        onclick="document.querySelector('input').click()"
-        classes="nav"
-        href={language === 'ES' ? '/#gigs' : `/${language.toLowerCase()}/#gigs`}
-        target="_self"
-      >
-        {gigs}
-      </TmLink></label
+    <TmLink
+      onclick="document.querySelector('input').click()"
+      classes="nav"
+      href={language === 'ES' ? '/#gigs' : `/${language.toLowerCase()}/#gigs`}
+      target="_self"
     >
+      {gigs}
+    </TmLink>
   </li>
   <li>
-    <label for="nav-menu"
-      ><TmLink
-        onclick="document.querySelector('input').click()"
-        classes="nav"
-        href={language === 'ES' ? '/#media' : `/${language.toLowerCase()}/#media`}
-        target="_self"
-      >
-        {media}
-      </TmLink></label
+    <TmLink
+      onclick="document.querySelector('input').click()"
+      classes="nav"
+      href={language === 'ES' ? '/#media' : `/${language.toLowerCase()}/#media`}
+      target="_self"
     >
+      {media}
+    </TmLink>
   </li>
   <li>
-    <label for="nav-menu"
-      ><TmLink
-        onclick="document.querySelector('input').click()"
-        classes="nav"
-        href={language === 'ES' ? '/#news' : `/${language.toLowerCase()}/#news`}
-        target="_self"
-      >
-        {news}
-      </TmLink></label
+    <TmLink
+      onclick="document.querySelector('input').click()"
+      classes="nav"
+      href={language === 'ES' ? '/#news' : `/${language.toLowerCase()}/#news`}
+      target="_self"
     >
+      {news}
+    </TmLink>
   </li>
   <li>
-    <label for="nav-menu"
-      ><TmLink
-        onclick="document.querySelector('input').click()"
-        classes="nav"
-        href={language === 'ES' ? '/#history' : `/${language.toLowerCase()}/#history`}
-        target="_self"
-      >
-        {history}
-      </TmLink></label
+    <TmLink
+      onclick="document.querySelector('input').click()"
+      classes="nav"
+      href={language === 'ES' ? '/#history' : `/${language.toLowerCase()}/#history`}
+      target="_self"
     >
+      {history}
+    </TmLink>
   </li>
   <li>
-    <label for="nav-menu"
-      ><TmLink
-        onclick="document.querySelector('input').click()"
-        classes="nav"
-        href={language === 'ES' ? '/#contact' : `/${language.toLowerCase()}/#contact`}
-        target="_self"
-      >
-        {contact}
-      </TmLink></label
+    <TmLink
+      onclick="document.querySelector('input').click()"
+      classes="nav"
+      href={language === 'ES' ? '/#contact' : `/${language.toLowerCase()}/#contact`}
+      target="_self"
     >
+      {contact}
+    </TmLink>
   </li>
 </ul>
 
