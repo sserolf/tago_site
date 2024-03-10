@@ -10,7 +10,23 @@ const { classes, src, alt, width } = Astro.props;
 const notLazy = ['band', 'fatmusik', 'menu', 'socialItem'].includes(classes ? classes : '');
 ---
 
-<img loading={notLazy ? 'eager' : 'lazy'} class={classes} src={src} alt={alt} width={width} />
+{
+  classes === 'band' && (
+    <img
+      loading={notLazy ? 'eager' : 'lazy'}
+      class={classes}
+      src={src}
+      alt={alt}
+      width={width}
+      onclick="document.querySelector('main').scrollTo(0, 0), location.hash = ''"
+    />
+  )
+}
+{
+  classes !== 'band' && (
+    <img loading={notLazy ? 'eager' : 'lazy'} class={classes} src={src} alt={alt} width={width} />
+  )
+}
 
 <style>
   .band {
