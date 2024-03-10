@@ -1,6 +1,5 @@
 ---
 import TmTitle from './TmTitle.astro';
-import TmText from './TmText.astro';
 import TmLink from './TmLink.astro';
 
 interface Props {
@@ -23,15 +22,15 @@ const { dictionary, constants } = Astro.props;
 <TmTitle title={dictionary.title} />
 <div class="container">
   <div class="column">
-    <TmText text={dictionary.mailTitle + ':'} />
+    <span>{dictionary.mailTitle + ':'}</span>
     <TmLink classes="contact" href={constants.mailUrl}>
-      <TmText text={constants.mailText} />
+      <span>{constants.mailText}</span>
     </TmLink>
   </div>
   <div class="column">
-    <TmText text={constants.instagramTitle + ':'} />
+    <span>{constants.instagramTitle + ':'}</span>
     <TmLink classes="contact" href={constants.instagramUrl}>
-      <TmText text={constants.instagramText} />
+      <span>{constants.instagramText}</span>
     </TmLink>
   </div>
 </div>
