@@ -14,20 +14,20 @@ interface Props {
 const { gigs, media, news, history, contact, language } = Astro.props;
 ---
 
+<input type="checkbox" id="nav-menu" />
+<nav>
+  <TmNav
+    gigs={gigs}
+    media={media}
+    news={news}
+    history={history}
+    contact={contact}
+    language={language}
+  />
+</nav>
 <main
   onclick="document.querySelector('input').checked ? document.querySelector('input').click() : null"
 >
-  <input type="checkbox" id="nav-menu" />
-  <nav>
-    <TmNav
-      gigs={gigs}
-      media={media}
-      news={news}
-      history={history}
-      contact={contact}
-      language={language}
-    />
-  </nav>
   <slot />
 </main>
 

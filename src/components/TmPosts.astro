@@ -22,7 +22,7 @@ const dictionary = getDictionary(language);
   totalPosts.map((post, count) => {
     if (count < 3) {
       return (
-        <div class="post">
+        <article class="post">
           <TmPost
             locale={locale}
             timestamp={post.timestamp}
@@ -35,12 +35,12 @@ const dictionary = getDictionary(language);
             language={language}
             aspect_ratio={post.aspect_ratio}
           />
-        </div>
+        </article>
       );
     } else if (count === 3) {
       return (
         <>
-          <div class="post">
+          <article class="post">
             <TmPost
               locale={locale}
               timestamp={post.timestamp}
@@ -53,7 +53,7 @@ const dictionary = getDictionary(language);
               language={language}
               aspect_ratio={post.aspect_ratio}
             />
-          </div>
+          </article>
           <div id="navigationButtons">
             <button id="moreNews">{dictionary.Common.moreNews}</button>
             <button id="closeNews" style="display: none;">
@@ -67,7 +67,7 @@ const dictionary = getDictionary(language);
 }
 <script is:inline defer>
   const createDivElement = () => {
-    const div = document.createElement('div');
+    const div = document.createElement('article');
     div.className = 'post';
     div.style.margin = '10px 0';
     return div;
