@@ -36,18 +36,16 @@ const sortedData = slicedData.sort((a, b) => {
     // const isLastGig = count === pastGigsLimit - 1;
 
     return (
-      <>
-        <li>
-          {gig.url ? (
-            <a href={gig.url} target="_blank">
-              <span>{gig.name}</span>
-            </a>
-          ) : (
-            <span>{gig.name}</span>
-          )}
-          <span>{formattedDate}</span>
-        </li>
-      </>
+      <li>
+        {gig.url ? (
+          <a href={gig.url} target="_blank">
+            {gig.name}
+          </a>
+        ) : (
+          <span>{gig.name}</span>
+        )}
+        <span>{formattedDate}</span>
+      </li>
     );
   })
 }

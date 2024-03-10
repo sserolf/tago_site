@@ -1,5 +1,4 @@
 ---
-import TmLink from './TmLink.astro';
 const { locale, timestamp, permalink, media, caption, type, id, title, aspect_ratio, language } =
   Astro.props;
 import type { ChildrenDatum } from '../types/posts';
@@ -28,9 +27,13 @@ const formattedLocaleDate = formattedDate.toLocaleDateString(locale.replace('_',
 
 {
   permalink && (
-    <TmLink classes="igPost" href={permalink}>
+    <span
+      class="igPost"
+      onclick="window.open(this.attributes['data-href'].value)"
+      data-href={permalink}
+    >
       {formattedLocaleDate} IG POST
-    </TmLink>
+    </span>
   )
 }
 {title && <span class="igPost">{`${formattedLocaleDate} - ${title}`}</span>}
@@ -73,6 +76,13 @@ const formattedLocaleDate = formattedDate.toLocaleDateString(locale.replace('_',
     width: 100%;
     height: auto;
   }
+
+  .igPost {
+    color: purple;
+    font-size: 1.25em;
+    font-weight: bold;
+  }
+
   p {
     white-space: pre-line;
   }
