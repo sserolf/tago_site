@@ -66,21 +66,22 @@ const dictionary = getDictionary(language);
   })
 }
 <script is:inline defer>
-  const createDivElement = () => {
+  const createArticleElement = () => {
     const div = document.createElement('article');
     div.className = 'post';
     div.style.margin = '10px 0';
     return div;
   };
 
-  const createAElement = (post) => {
-    const a = document.createElement('a');
-    a.innerText = `${new Date(post.timestamp).toLocaleDateString()} - IG POST`;
-    a.href = post.permalink;
-    a.target = '_blank';
-    a.style.color = 'purple';
-    a.style.fontWeight = 'bold';
-    return a;
+  const createTitleSpanElement = (post) => {
+    const span = document.createElement('span');
+    span.innerText = `${new Date(post.timestamp).toLocaleDateString()} - IG POST`;
+    span.onclick = () => open(post.permalink);
+    span.style.color = 'purple';
+    span.style.fontSize = '1.25em';
+    span.style.fontWeight = 'bold';
+    span.style.textDecoration = 'underline';
+    return span;
   };
 
   const createSpanElement = (post) => {
@@ -119,38 +120,38 @@ const dictionary = getDictionary(language);
   };
 
   const createPostElement = (post) => {
-    const div = createDivElement();
+    const article = createArticleElement();
     if (!post.title) {
-      const a = createAElement(post);
-      div.appendChild(a);
+      const titleSpan = createTitleSpanElement(post);
+      article.appendChild(titleSpan);
     } else {
       const span = createSpanElement(post);
-      div.appendChild(span);
+      article.appendChild(span);
     }
     if (post.caption) {
       const p = createPElement(post);
-      div.appendChild(p);
+      article.appendChild(p);
     }
     if (post.media_url) {
       if (post.media_type === 'IMAGE') {
         const img = createImgElement(post);
-        div.appendChild(img);
+        article.appendChild(img);
       } else if (post.media_type === 'VIDEO') {
         const video = createVideoElement(post);
-        div.appendChild(video);
+        article.appendChild(video);
       } else if (post.media_type === 'CAROUSEL_ALBUM') {
         post.children.data.map((child) => {
           if (child.media_type === 'IMAGE') {
             const img = createImgElement(child);
-            div.appendChild(img);
+            article.appendChild(img);
           } else if (child.media_type === 'VIDEO') {
             const video = createVideoElement(child);
-            div.appendChild(video);
+            article.appendChild(video);
           }
         });
       }
     }
-    return div;
+    return article;
   };
 
   const addMoreNews = (posts, length) => {
