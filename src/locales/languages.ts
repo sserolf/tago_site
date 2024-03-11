@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 export default {
   ES: {
     Common: {
@@ -8,7 +9,8 @@ export default {
       pastGigs: 'CONCIERTOS PASADOS',
       upcomingGigs: 'CONCIERTOS PRÓXIMOS',
       moreNews: 'MÁS NOTICIAS',
-      closeNews: 'MOSTRAR MENOS',
+      closeContent: 'MOSTRAR MENOS',
+      moreGigs: 'MÁS CONCIERTOS',
     },
     Contact: {
       mailTitle: 'Correo',
@@ -32,7 +34,8 @@ export default {
       pastGigs: 'PAST GIGS',
       upcomingGigs: 'UPCOMING GIGS',
       moreNews: 'MORE NEWS',
-      closeNews: 'SHOW LESS',
+      closeContent: 'SHOW LESS',
+      moreGigs: 'MORE GIGS',
     },
     Contact: {
       mailTitle: 'Mail',
@@ -56,7 +59,8 @@ export default {
       pastGigs: 'CONCERTS PASSÉS',
       upcomingGigs: 'CONCERTS À VENIR',
       moreNews: 'PLUS DE NOUVELLES',
-      closeNews: 'MONTRER MOINS',
+      closeContent: 'MONTRER MOINS',
+      moreGigs: 'PLUS DE CONCERTS',
     },
     Contact: {
       mailTitle: 'Mail',
@@ -68,7 +72,7 @@ export default {
     History: {
       title: 'HISTOIRE',
       // eslint-disable-next-line max-len, prettier/prettier
-      text: 'Tago Mago est une entité sonore incorporelle et indépendante dont les membres ne sont que des messagers. Elle est apparue de nulle part en août 2019, et après avoir entendu son appel, Juanma et Fran décident d\'y répondre, pour ajouter plus tard Samu. Le filtre acoustique fabriqué par ces trois éléments est ce qui façonne les ondes musicales qui émanent de Tago Mago.\n\nLeur première en direct a lieu le 20 février 2020 à la Sala Holländer, où ils partagent la scène avec le groupe jerezano SURYA. Après ce début, le groupe se concentre sur la préparation de l\'enregistrement de son premier LP. Cependant, l\'apparition de la pandémie sanitaire retarde ses plans de diffusion et il n\'y a pas de nouvelles du trio jusqu\'en juin 2022, date à laquelle sort un premier single et un clip vidéo, Freedom, suivi un mois plus tard de My Way. Ce sont deux des huit pistes qui composent un premier album annoncé pour le 23 septembre, qui a été enregistré au Sputnik Recording Studio.',
+      text: "Tago Mago est une entité sonore incorporelle et indépendante dont les membres ne sont que des messagers. Elle est apparue de nulle part en août 2019, et après avoir entendu son appel, Juanma et Fran décident d'y répondre, pour ajouter plus tard Samu. Le filtre acoustique fabriqué par ces trois éléments est ce qui façonne les ondes musicales qui émanent de Tago Mago.\n\nLeur première en direct a lieu le 20 février 2020 à la Sala Holländer, où ils partagent la scène avec le groupe jerezano SURYA. Après ce début, le groupe se concentre sur la préparation de l'enregistrement de son premier LP. Cependant, l'apparition de la pandémie sanitaire retarde ses plans de diffusion et il n'y a pas de nouvelles du trio jusqu'en juin 2022, date à laquelle sort un premier single et un clip vidéo, Freedom, suivi un mois plus tard de My Way. Ce sont deux des huit pistes qui composent un premier album annoncé pour le 23 septembre, qui a été enregistré au Sputnik Recording Studio.",
     },
   },
   DE: {
@@ -80,7 +84,8 @@ export default {
       pastGigs: 'VERGANGENE KONZERTE',
       upcomingGigs: 'KOMMENDE KONZERTE',
       moreNews: 'MEHR NACHRICHTEN',
-      closeNews: 'WENIGER ANZEIGEN',
+      closeContent: 'WENIGER ANZEIGEN',
+      moreGigs: 'MEHR KONZERTE',
     },
     Contact: {
       mailTitle: 'Mail',
@@ -104,7 +109,8 @@ export default {
       pastGigs: 'CONCERTI PASSATI',
       upcomingGigs: 'CONCERTI FUTURI',
       moreNews: 'ALTRE NOTIZIE',
-      closeNews: 'MOSTRA MENO',
+      closeContent: 'MOSTRA MENO',
+      moreGigs: 'PIÙ CONCERTI',
     },
     Contact: {
       mailTitle: 'Mail',
@@ -116,7 +122,7 @@ export default {
     History: {
       title: 'STORIA',
       // eslint-disable-next-line max-len, prettier/prettier
-      text: 'Tago Mago è un\'entità sonora incorporea e indipendente di cui i suoi membri sono solo messaggeri. È emerso dal nulla nell\'agosto 2019, e dopo aver sentito il suo richiamo, Juanma e Fran decidono di rispondere, per aggiungere successivamente Samu. Il filtro acustico prodotto da questi tre elementi è ciò che dà forma alle onde musicali che emanano da Tago Mago.\n\nIl loro debutto dal vivo avviene il 20 febbraio 2020 alla Sala Holländer, dove hanno condiviso il palco con la band jerezana SURYA. Dopo questo debutto, la band si concentra sulla preparazione della registrazione del loro primo LP. Tuttavia, l\'insorgere della pandemia sanitaria ritarda i loro piani di diffusione e non ci sono notizie del trio fino a giugno 2022, quando esce un primo singolo e videoclip, Freedom, a cui segue un mese dopo My Way. Sono due dei otto brani che compongono un album di debutto annunciato per il 23 settembre, che è stato registrato presso lo Sputnik Recording Studio.',
+      text: "Tago Mago è un'entità sonora incorporea e indipendente di cui i suoi membri sono solo messaggeri. È emerso dal nulla nell'agosto 2019, e dopo aver sentito il suo richiamo, Juanma e Fran decidono di rispondere, per aggiungere successivamente Samu. Il filtro acustico prodotto da questi tre elementi è ciò che dà forma alle onde musicali che emanano da Tago Mago.\n\nIl loro debutto dal vivo avviene il 20 febbraio 2020 alla Sala Holländer, dove hanno condiviso il palco con la band jerezana SURYA. Dopo questo debutto, la band si concentra sulla preparazione della registrazione del loro primo LP. Tuttavia, l'insorgere della pandemia sanitaria ritarda i loro piani di diffusione e non ci sono notizie del trio fino a giugno 2022, quando esce un primo singolo e videoclip, Freedom, a cui segue un mese dopo My Way. Sono due dei otto brani che compongono un album di debutto annunciato per il 23 settembre, che è stato registrato presso lo Sputnik Recording Studio.",
     },
   },
   PT: {
@@ -128,7 +134,8 @@ export default {
       pastGigs: 'CONCERTOS PASSADOS',
       upcomingGigs: 'CONCERTOS FUTUROS',
       moreNews: 'MAIS NOTÍCIAS',
-      closeNews: 'MOSTRAR MENOS',
+      closeContent: 'MOSTRAR MENOS',
+      moreGigs: 'MAIS CONCERTOS',
     },
     Contact: {
       mailTitle: 'Mail',

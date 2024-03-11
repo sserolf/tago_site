@@ -54,10 +54,10 @@ const dictionary = getDictionary(language);
               aspect_ratio={post.aspect_ratio}
             />
           </article>
-          <div id="navigationButtons">
+          <div id="postNavigationButtons">
             <button id="moreNews">{dictionary.Common.moreNews}</button>
             <button id="closeNews" style="display: none;">
-              {dictionary.Common.closeNews}
+              {dictionary.Common.closeContent}
             </button>
           </div>
         </>
@@ -67,10 +67,10 @@ const dictionary = getDictionary(language);
 }
 <script is:inline defer>
   const createArticleElement = () => {
-    const div = document.createElement('article');
-    div.className = 'post';
-    div.style.margin = '10px 0';
-    return div;
+    const article = document.createElement('article');
+    article.className = 'post';
+    article.style.margin = '10px 0';
+    return article;
   };
 
   const createTitleSpanElement = (post) => {
@@ -90,7 +90,6 @@ const dictionary = getDictionary(language);
     const title = post.title;
     const separator = title !== '' ? ' - ' : '';
     span.innerText = `${timestamp}${separator}${title}`;
-    span.innerText = `${new Date(post.timestamp).toLocaleDateString()} ${separator} ${post.title}`;
     span.style.color = 'black';
     span.style.fontWeight = 'bold';
     return span;
@@ -159,7 +158,7 @@ const dictionary = getDictionary(language);
       const postElement = createPostElement(post);
       document
         .getElementById('news')
-        ?.insertBefore(postElement, document.getElementById('navigationButtons'));
+        ?.insertBefore(postElement, document.getElementById('postNavigationButtons'));
       if (document.getElementsByClassName('post').length > 4) {
         showButton('closeNews');
       } else {

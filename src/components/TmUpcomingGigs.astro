@@ -1,39 +1,19 @@
 ---
+import { type Gig } from '../types/gigs';
+import { formatUpcomingGigsDates } from 'src/utils/gigsUtils';
+
 interface Props {
-  data: {
-    name: string;
-    date: string;
-    url?: string;
-  }[];
+  data: Gig[];
   locale: string;
 }
 
 const { data, locale } = Astro.props;
 
-const formatDate = (date: string) => {
-  const dateParts = date.split('/');
-  const newDate = new Date();
-  newDate.setDate(Number(dateParts[0]));
-  newDate.setMonth(Number(dateParts[1]) - 1);
-  newDate.setFullYear(Number(dateParts[2]));
-  return newDate;
-};
-const sortedData = data.sort((a, b) => {
-  const dateA = new Date(formatDate(a.date));
-  const dateB = new Date(formatDate(b.date));
-  return Number(dateA) - Number(dateB);
-});
+const formattedData = formatUpcomingGigsDates(data, locale);
 ---
 
 {
-  sortedData.map((gig) => {
-    const date = formatDate(gig.date);
-    const formattedDate = date.toLocaleDateString(locale.replace('_', '-'), {
-      year: 'numeric',
-      month: 'short',
-      day: '2-digit',
-    });
-
+  formattedData.map((gig) => {
     return (
       <li>
         <>
@@ -45,7 +25,7 @@ const sortedData = data.sort((a, b) => {
             <span>{gig.name}</span>
           )}
         </>
-        <span>{formattedDate}</span>
+        <span>{gig.dateToShow}</span>
       </li>
     );
   })

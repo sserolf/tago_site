@@ -1,54 +1,218 @@
 ---
+import { getDictionary } from 'src/locales/getDictionary';
+import type { Gig } from 'src/types/gigs';
+import type { AvailableLanguages } from 'src/types/language';
+import { formatPastGigsDates } from 'src/utils/gigsUtils';
+
 interface Props {
-  data: {
-    name: string;
-    date: string;
-    url?: string;
-  }[];
+  data: Gig[];
+  language: AvailableLanguages;
   locale: string;
 }
 
-const { data, locale } = Astro.props;
+const { data, language, locale } = Astro.props;
 
 const pastGigsLimit = 4;
-const slicedData = data.slice(0, pastGigsLimit);
 
-const formatDate = (date: string) => {
-  const [day, month, year] = date.split('/');
-  const newDate = new Date(Number(year), Number(month) - 1, Number(day));
-  return newDate.toLocaleDateString(locale.replace('_', '-'), {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  });
-};
+const formattedData = formatPastGigsDates(data, locale);
 
-const sortedData = slicedData.sort((a, b) => {
-  const dateA = new Date(formatDate(a.date));
-  const dateB = new Date(formatDate(b.date));
-  return dateB.getTime() - dateA.getTime();
-});
+const slicedData = formattedData.slice(0, pastGigsLimit);
+const dictionary = getDictionary(language);
 ---
 
 {
-  sortedData.map((gig) => {
-    const formattedDate = formatDate(gig.date);
-    // const isLastGig = count === pastGigsLimit - 1;
+  slicedData.map((gig, count) => {
+    const isLastGig = count === pastGigsLimit - 1;
 
     return (
-      <li>
-        {gig.url ? (
-          <a href={gig.url} target="_blank">
-            {gig.name}
-          </a>
-        ) : (
-          <span>{gig.name}</span>
+      <>
+        <li class="pastGig">
+          {gig.url ? (
+            <a href={gig.url} target="_blank">
+              {gig.name}
+            </a>
+          ) : (
+            <span>{gig.name}</span>
+          )}
+          <span>{gig.date}</span>
+        </li>
+        {isLastGig && (
+          <div id="gigsNavigationButtons">
+            <button id="moreGigs">{dictionary.Common.moreGigs}</button>
+            <button id="closeGigs" style="display: none;">
+              {dictionary.Common.closeContent}
+            </button>
+          </div>
         )}
-        <span>{formattedDate}</span>
-      </li>
+      </>
     );
   })
 }
+
+<script is:inline defer>
+  const createLiElement = () => {
+    const li = document.createElement('article');
+    li.className = 'pastGig';
+    li.style.display = 'flex';
+    li.style.justifyContent = 'space-between';
+    li.style.minHeight = '48px';
+    li.style.alignItems = 'center';
+    return li;
+  };
+
+  const createAElement = (gig) => {
+    const a = document.createElement('a');
+    a.innerText = gig.name;
+    a.href = gig.url;
+    a.style.color = 'darkblue';
+    a.onmouseover = () => {
+      a.style.color = '#06f';
+    };
+    a.onmouseout = () => {
+      a.style.color = 'darkblue';
+    };
+    return a;
+  };
+
+  const createGigSpanElement = (text) => {
+    const span = document.createElement('span');
+    span.innerText = text;
+    return span;
+  };
+
+  const createGigElement = (gig) => {
+    const li = createLiElement();
+    if (gig.url) {
+      const a = createAElement(gig);
+      li.appendChild(a);
+    } else {
+      const titleSpan = createGigSpanElement(gig.name);
+      li.appendChild(titleSpan);
+    }
+    const dateSpan = createGigSpanElement(gig.dateToShow);
+    li.appendChild(dateSpan);
+    return li;
+  };
+
+  const addMoreGigs = (gigs, length) => {
+    gigs.map((gig) => {
+      const gigElement = createGigElement(gig);
+      document
+        .getElementById('pastGigs')
+        ?.insertBefore(gigElement, document.getElementById('gigsNavigationButtons'));
+      if (document.getElementsByClassName('pastGig').length > 4) {
+        showButton('closeGigs');
+      } else {
+        hideButton('closeGigs');
+      }
+      if (length === document.getElementsByClassName('pastGig').length) {
+        hideButton('moreGigs');
+      }
+    });
+  };
+
+  const moreGigsButton = document.getElementById('moreGigs');
+  if (moreGigsButton)
+    moreGigsButton.onclick = async () => {
+      const jsonGigs = await getJsonGigs();
+      addMoreGigs(jsonGigs.gigs, jsonGigs.length);
+    };
+
+  const closeGigs = () => {
+    removeGigs();
+    hideButton('closeGigs');
+    showButton('moreGigs');
+  };
+
+  const closeGigsButton = document.getElementById('closeGigs');
+  if (closeGigsButton)
+    closeGigsButton.onclick = () => {
+      closeGigs();
+    };
+
+  const splitGigs = (gigs) => {
+    const upcomingGigs = [];
+    const pastGigs = [];
+    gigs.map((gig) => {
+      const dateString = gig.date;
+      const [month, day, year] = dateString.split('/');
+      const date = new Date();
+      date.setDate(Number(day));
+      date.setMonth(Number(month) - 1);
+      date.setFullYear(Number(year));
+
+      date.getTime() < new Date().getTime() ? pastGigs.push(gig) : upcomingGigs.push(gig);
+    });
+    return { upcomingGigs: upcomingGigs, pastGigs: pastGigs };
+  };
+
+  const transformInDate = (date) => {
+    const [month, day, year] = date.split('/');
+    const newDate = new Date();
+    newDate.setDate(Number(day));
+    newDate.setMonth(Number(month) - 1);
+    newDate.setFullYear(Number(year));
+    return newDate;
+  };
+
+  const sortGigs = (gigs, type) => {
+    const sortedGigs = gigs.sort((a, b) => {
+      const dateA = transformInDate(a.date);
+      const dateB = transformInDate(b.date);
+      if (type === 'past') {
+        return dateB.getTime() - dateA.getTime();
+      } else {
+        return dateA.getTime() - dateB.getTime();
+      }
+    });
+    return sortedGigs;
+  };
+
+  const formatPastGigsDates = (gigs, locale) => {
+    const sortedData = sortGigs(gigs, 'past');
+    sortedData.map((gig) => {
+      gig.dateToShow = new Date(gig.date).toLocaleDateString(locale.replace('_', '-'), {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      });
+    });
+    return sortedData;
+  };
+
+  const getJsonGigs = async () => {
+    let data;
+    if (localStorage.getItem('pastGig')) {
+      data = JSON.parse(localStorage.getItem('pastGig'));
+    } else {
+      const jsonPath = location.pathname.length > 1 ? '../json/gigs.json' : 'json/gigs.json';
+      const response = await fetch(jsonPath);
+      data = await response.json();
+      localStorage.setItem('gigs', JSON.stringify(data));
+    }
+    const pastGigs = splitGigs(data).pastGigs;
+    const reversedData = pastGigs.reverse();
+    const filteredPastGigs = formatPastGigsDates(
+      reversedData,
+      document.getElementsByName('og:locale')[0].content,
+    );
+    console.log(filteredPastGigs);
+    const gigs = document.getElementsByClassName('pastGig');
+    const dataToAppend = filteredPastGigs.slice(gigs.length, gigs.length + 4);
+    return { gigs: dataToAppend, length: filteredPastGigs.length };
+  };
+
+  window.onbeforeunload = () => {
+    localStorage.removeItem('gigs');
+  };
+
+  const removeGigs = () => {
+    const gigs = document.getElementsByClassName('pastGig');
+    for (let i = gigs.length - 1; i > 3; i--) {
+      gigs[i].remove();
+    }
+  };
+</script>
 
 <style>
   a {
@@ -71,9 +235,8 @@ const sortedData = slicedData.sort((a, b) => {
     border-radius: 6px;
     color: black;
     font-size: 15px;
+    margin: 10px 0;
     padding: 10px;
-    width: 80%;
-    margin: 0 auto;
-    cursor: pointer;
+    width: 100%;
   }
 </style>

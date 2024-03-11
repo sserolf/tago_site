@@ -1,28 +1,20 @@
 ---
-const { data, pastGigsTitle, upcomingGigsTitle, locale } = Astro.props;
-import gigs from './../json/gigs.json';
+import type { AvailableLanguages } from 'src/types/language';
 import TmPastGigs from './TmPastGigs.astro';
 import TmUpcomingGigs from './TmUpcomingGigs.astro';
-let pastGigs: (
-    | { date: string; name: string; url?: string }
-    | { date: string; name: string; url: string }
-  )[] = [],
-  upcomingGigs: (
-    | { date: string; name: string; url?: undefined }
-    | { date: string; name: string; url: string }
-  )[] = [];
-{
-  gigs.map((gig) => {
-    const dateString = gig.date;
-    const dateParts = dateString.split('/');
-    const date = new Date();
-    date.setDate(Number(dateParts[0]));
-    date.setMonth(Number(dateParts[1]) - 1);
-    date.setFullYear(Number(dateParts[2]));
-
-    date < new Date() ? pastGigs.push(gig) : upcomingGigs.push(gig);
-  });
+import { type Gig } from './../types/gigs';
+import gigs from '../../public/json/gigs.json';
+import { splitGigs } from '../utils/gigsUtils';
+interface Props {
+  data: string;
+  pastGigsTitle: string;
+  upcomingGigsTitle: string;
+  language: AvailableLanguages;
+  locale: string;
 }
+const { data, pastGigsTitle, upcomingGigsTitle, language, locale } = Astro.props;
+
+const { upcomingGigs, pastGigs }: { upcomingGigs: Gig[]; pastGigs: Gig[] } = splitGigs(gigs);
 ---
 
 <span class="title section">{data}</span>
@@ -31,7 +23,7 @@ let pastGigs: (
   upcomingGigs.length !== 0 && (
     <div>
       <span class="title gigs">{upcomingGigsTitle}</span>
-      <ul>
+      <ul id="upcomingGigs">
         <TmUpcomingGigs data={upcomingGigs} locale={locale} />
       </ul>
     </div>
@@ -41,8 +33,8 @@ let pastGigs: (
   pastGigs.length !== 0 && (
     <div>
       <span class="title gigs">{pastGigsTitle}</span>
-      <ul>
-        <TmPastGigs data={pastGigs} locale={locale} />
+      <ul id="pastGigs">
+        <TmPastGigs data={pastGigs} locale={locale} language={language} />
       </ul>
     </div>
   )
