@@ -3,12 +3,12 @@
 import TmPost from './TmPost.astro';
 
 // IMPORT TYPES
-import { type MediaDatum } from './../types/posts';
+import { type Post } from './../types/posts';
 
 // IMPORT ALL POSTS
 import allPosts from './../../public/json/igPosts.json';
 const igPostsLimit = 4;
-const totalPosts: MediaDatum[] = allPosts.slice(0, igPostsLimit) as MediaDatum[];
+const totalPosts: Post[] = allPosts.slice(0, igPostsLimit) as Post[];
 
 // GET ASTRO PROPS
 const { locale, language } = Astro.props;

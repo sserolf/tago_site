@@ -1,20 +1,4 @@
-export interface IGPostsResponse {
-  business_discovery: BusinessDiscovery;
-  id: string;
-  error: Error;
-}
-
-export interface BusinessDiscovery {
-  media: Media;
-  id: string;
-}
-
-export interface Media {
-  data: MediaDatum[];
-  paging: Paging;
-}
-
-export interface MediaDatum {
+export interface Post {
   caption?: string;
   timestamp: string;
   permalink?: string;
@@ -27,10 +11,10 @@ export interface MediaDatum {
 }
 
 export interface Children {
-  data: ChildrenDatum[];
+  data: ChildrenData[];
 }
 
-export interface ChildrenDatum {
+export interface ChildrenData {
   media_url: string;
   media_type: MediaType;
   id: string;
@@ -41,20 +25,4 @@ export enum MediaType {
   CarouselAlbum = 'CAROUSEL_ALBUM',
   Image = 'IMAGE',
   Video = 'VIDEO',
-}
-
-export interface Paging {
-  cursors: Cursors;
-}
-
-export interface Cursors {
-  after: string;
-}
-
-export interface Error {
-  message: string;
-  type: string;
-  is_transient: boolean;
-  code: number;
-  fbtrace_id: string;
 }

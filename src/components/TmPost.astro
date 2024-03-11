@@ -1,12 +1,12 @@
 ---
 const { locale, timestamp, permalink, media, caption, type, id, title, aspect_ratio, language } =
   Astro.props;
-import type { ChildrenDatum } from '../types/posts';
-let carousel: ChildrenDatum[] = [],
+import type { ChildrenData } from '../types/posts';
+let carousel: ChildrenData[] = [],
   video,
   image;
 if (type === 'CAROUSEL_ALBUM') {
-  carousel = media as ChildrenDatum[];
+  carousel = media as ChildrenData[];
 } else if (type === 'VIDEO') {
   video = media;
 } else {
@@ -52,7 +52,7 @@ const formattedLocaleDate = formattedDate.toLocaleDateString(locale.replace('_',
 {video && <video src={video} controls />}
 {
   carousel &&
-    carousel.map((carouselItem: ChildrenDatum) => {
+    carousel.map((carouselItem: ChildrenData) => {
       if (carouselItem.media_type === 'VIDEO') {
         return <video src={carouselItem.media_url} controls />;
       } else if (carouselItem.media_type === 'IMAGE') {
