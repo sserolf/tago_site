@@ -37,12 +37,14 @@ const dictionary = getDictionary(language);
           <span>{gig.date}</span>
         </li>
         {isLastGig && (
-          <div id="gigsNavigationButtons">
-            <button id="moreGigs">{dictionary.Common.moreGigs}</button>
-            <button id="closeGigs" style="display: none;">
-              {dictionary.Common.closeContent}
-            </button>
-          </div>
+          <li>
+            <div id="gigsNavigationButtons">
+              <button id="moreGigs">{dictionary.Common.moreGigs}</button>
+              <button id="closeGigs" style="display: none;">
+                {dictionary.Common.closeContent}
+              </button>
+            </div>
+          </li>
         )}
       </>
     );
@@ -51,7 +53,7 @@ const dictionary = getDictionary(language);
 
 <script is:inline defer>
   const createLiElement = () => {
-    const li = document.createElement('article');
+    const li = document.createElement('li');
     li.className = 'pastGig';
     li.style.display = 'flex';
     li.style.justifyContent = 'space-between';
@@ -228,6 +230,10 @@ const dictionary = getDictionary(language);
     justify-content: space-between;
     min-height: 48px;
     align-items: center;
+  }
+
+  li:last-of-type {
+    display: block;
   }
 
   button {
