@@ -53,6 +53,8 @@ const saveJsonAndDownloadImages = async () => {
     const filePath = 'public/json/igPosts.json';
     fs.writeFileSync(filePath, igPostsData);
     console.log(`${filePath} created successfully!`);
+    fs.copyFileSync('src/json/gigs.json', 'public/json/gigs.json');
+    console.log('gigs.json copied successfully!');
   };
 
   const changeMediaUrlPathAndAddAspectRatio = async () => {
