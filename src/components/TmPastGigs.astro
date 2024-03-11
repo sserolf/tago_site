@@ -101,7 +101,7 @@ const dictionary = getDictionary(language);
       const gigElement = createGigElement(gig);
       document
         .getElementById('pastGigs')
-        ?.insertBefore(gigElement, document.getElementById('gigsNavigationButtons'));
+        ?.insertBefore(gigElement, document.getElementById('gigsNavigationButtons').parentElement);
       if (document.getElementsByClassName('pastGig').length > 4) {
         showButton('closeGigs');
       } else {
@@ -198,7 +198,6 @@ const dictionary = getDictionary(language);
       reversedData,
       document.getElementsByName('og:locale')[0].content,
     );
-    console.log(filteredPastGigs);
     const gigs = document.getElementsByClassName('pastGig');
     const dataToAppend = filteredPastGigs.slice(gigs.length, gigs.length + 4);
     return { gigs: dataToAppend, length: filteredPastGigs.length };
