@@ -1,27 +1,18 @@
-name: Build and Deploy
+name: Redeploy
+
 on:
   schedule:
-    - cron:  '0 */12 * * *'
-    
-  workflow_dispatch:
+    - cron: '0 */12 * * *'
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout 🛎️
-      uses: actions/checkout@v2.3.1
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-    - name: Install and Build 🔧
+    - name: Redeploy
       run: |
-        npm install
-        npm run build
-      env:
-        IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
-
-    - name: Deploy 🚀
-      uses: JamesIves/github-pages-deploy-action@4.1.5
-      with:
-        token: ${{ secrets.TM_PAT }}
-        BRANCH: gh-pages
-        FOLDER: dist
+        git commit --allow-empty -m "Redeploy"
+        git push
