@@ -41,3 +41,6 @@ vercel_token.txt
 
 # npm package-lock files
 package-lock.json
+
+# compressed images
+public/assets/images/compressed/
