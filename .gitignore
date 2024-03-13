@@ -27,8 +27,14 @@ to_compress/ig/
 # ig posts
 public/json/igPosts.json
 
+# ig posts
+public/json/gigs.json
+
 # ig token
-ig_token
+ig_token.txt
 
 # github token
-github_token
+github_token.txt
+
+# vercel token
+vercel_token.txt
