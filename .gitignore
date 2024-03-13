@@ -38,3 +38,6 @@ github_token.txt
 
 # vercel token
 vercel_token.txt
+
+# npm package-lock files
+package-lock.json
