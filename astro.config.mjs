@@ -1,5 +1,7 @@
 import { defineConfig } from 'astro/config';
 
+import node from '@astrojs/node';
+
 // https://astro.build/config
 export default defineConfig({
   devToolbar: {
@@ -12,4 +14,8 @@ export default defineConfig({
       prefixDefaultLocale: false,
     },
   },
+  output: 'hybrid',
+  adapter: node({
+    mode: 'standalone',
+  }),
 });
