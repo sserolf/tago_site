@@ -15,7 +15,7 @@ jobs:
 
     - name: Set up Git user
       run: |
-        git config --local user.name "${{ secrets.GIT_USERNAME }}"
+        git config --local user.name "sserolf"
         git config --local user.email "${{ secrets.GIT_EMAIL }}"
 
     - name: Redeploy
