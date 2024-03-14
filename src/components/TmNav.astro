@@ -28,7 +28,7 @@ const availableLanguages: { code: AvailableLanguages; name: string; flag: string
     <TmLink
       onclick="document.querySelector('input').click()"
       classes="nav"
-      href={language === 'ES' ? '/#gigs' : `/${language.toLowerCase()}/#gigs`}
+      href="#gigs"
       target="_self"
     >
       {gigs}
@@ -38,7 +38,7 @@ const availableLanguages: { code: AvailableLanguages; name: string; flag: string
     <TmLink
       onclick="document.querySelector('input').click()"
       classes="nav"
-      href={language === 'ES' ? '/#media' : `/${language.toLowerCase()}/#media`}
+      href="#media"
       target="_self"
     >
       {media}
@@ -48,7 +48,7 @@ const availableLanguages: { code: AvailableLanguages; name: string; flag: string
     <TmLink
       onclick="document.querySelector('input').click()"
       classes="nav"
-      href={language === 'ES' ? '/#news' : `/${language.toLowerCase()}/#news`}
+      href="#news"
       target="_self"
     >
       {news}
@@ -58,7 +58,7 @@ const availableLanguages: { code: AvailableLanguages; name: string; flag: string
     <TmLink
       onclick="document.querySelector('input').click()"
       classes="nav"
-      href={language === 'ES' ? '/#history' : `/${language.toLowerCase()}/#history`}
+      href="#history"
       target="_self"
     >
       {history}
@@ -68,7 +68,7 @@ const availableLanguages: { code: AvailableLanguages; name: string; flag: string
     <TmLink
       onclick="document.querySelector('input').click()"
       classes="nav"
-      href={language === 'ES' ? '/#contact' : `/${language.toLowerCase()}/#contact`}
+      href="#contact"
       target="_self"
     >
       {contact}
@@ -83,7 +83,7 @@ const availableLanguages: { code: AvailableLanguages; name: string; flag: string
 
 <select
   aria-label="Language"
-  onchange="location.hash = '', location.pathname = this.value.toLowerCase() !== 'es' ? `${this.value.toLowerCase()}/` : ''"
+  onchange="document.cookie = `language=${this.value}; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT`, location.href = ''"
 >
   {
     availableLanguages.map((lang) =>
@@ -95,7 +95,7 @@ const availableLanguages: { code: AvailableLanguages; name: string; flag: string
         <option value={lang.code}>
           {lang.flag} {lang.name}
         </option>
-      ),
+      )
     )
   }
 </select>

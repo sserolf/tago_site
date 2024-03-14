@@ -1,5 +1,4 @@
 ---
-import type { AvailableLanguages } from 'src/types/language';
 import TmImage from './TmImage.astro';
 
 interface Props {
@@ -7,15 +6,9 @@ interface Props {
     title: string;
     img: string;
   }[];
-  language: AvailableLanguages;
 }
 
-const { data, language } = Astro.props;
-if (language !== 'ES') {
-  data.map((item) => {
-    item.img = '../' + item.img;
-  });
-}
+const { data } = Astro.props;
 ---
 
 <header>

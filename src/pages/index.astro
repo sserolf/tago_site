@@ -6,13 +6,25 @@ import Components from '../layouts/Components.astro';
 // TYPES
 import type { AvailableLanguages, AvailableLocales } from '../types/language';
 
-// LANGUAGE COOKIE ONLY FOR SSR
-// const cookieLanguage: AvailableLanguages = localStorage
-//   .get('language')
-//   ?.value.toUpperCase() as AvailableLanguages;
+// LANGUAGE COOKIE
+const cookieLanguage: AvailableLanguages = Astro.cookies.get('language')
+  ?.value as AvailableLanguages;
+
+// LANGUAGE HEADER
+const acceptLanguage = Astro.request.headers
+  .get('Accept-Language')
+  ?.split(',')[0]
+  .split('-')[0]
+  .toUpperCase() as AvailableLanguages;
 
 // LANGUAGE
-const language: AvailableLanguages = 'ES' as AvailableLanguages;
+let language: AvailableLanguages = 'ES';
+if (cookieLanguage) {
+  language = cookieLanguage;
+} else {
+  language = acceptLanguage as AvailableLanguages;
+  Astro.cookies.set('language', language);
+}
 
 // LOCALE
 import { getLocale } from '../locales/getLocale';
