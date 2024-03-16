@@ -44,3 +44,6 @@ package-lock.json
 
 # compressed images
 public/assets/images/compressed/
+
+# vercel files
+.vercel/*

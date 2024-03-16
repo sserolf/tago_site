@@ -1,6 +1,5 @@
 ---
-const { locale, timestamp, permalink, media, caption, type, id, title, aspect_ratio, language } =
-  Astro.props;
+const { locale, timestamp, permalink, media, caption, type, id, title, aspect_ratio } = Astro.props;
 import type { ChildrenData } from '../types/posts';
 let carousel: ChildrenData[] = [],
   video,
@@ -71,6 +70,7 @@ const formattedLocaleDate = formattedDate.toLocaleDateString(locale.replace('_',
 
 <style>
   img {
+    border-radius: 5px;
     width: 100%;
     height: auto;
   }

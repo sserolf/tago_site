@@ -21,7 +21,7 @@ export interface ChildrenData {
   aspect_ratio?: string;
 }
 
-export enum MediaType {
+enum MediaType {
   CarouselAlbum = 'CAROUSEL_ALBUM',
   Image = 'IMAGE',
   Video = 'VIDEO',

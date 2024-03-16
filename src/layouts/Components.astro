@@ -28,7 +28,7 @@ import { getDictionary } from '../locales/getDictionary';
 const dictionary = getDictionary(language);
 ---
 
-<TmHeaderIcons data={HEADER_ICONS} language={language} />
+<TmHeaderIcons data={HEADER_ICONS} />
 <TmContent
   gigs={dictionary.Common.gigsTitle}
   media={dictionary.Common.mediaTitle}
@@ -60,6 +60,6 @@ const dictionary = getDictionary(language);
   </TmSection>
 </TmContent>
 <TmFooter>
-  <TmFooterIcons data={FOOTER_ICONS} language={language} />
+  <TmFooterIcons data={FOOTER_ICONS} />
   <TmCopy data={dictionary.Common.copy} />
 </TmFooter>

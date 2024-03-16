@@ -14,7 +14,6 @@ const cookieLanguage: AvailableLanguages = Astro.cookies.get('language')
 const acceptLanguage = Astro.request.headers
   .get('Accept-Language')
   ?.split(',')[0]
-  .split('-')[0]
   .toUpperCase() as AvailableLanguages;
 
 // LANGUAGE
@@ -22,8 +21,11 @@ let language: AvailableLanguages = 'ES';
 if (cookieLanguage) {
   language = cookieLanguage;
 } else {
-  language = acceptLanguage as AvailableLanguages;
-  Astro.cookies.set('language', language);
+  language = (acceptLanguage as AvailableLanguages) || 'ES';
+  Astro.cookies.set('language', language, {
+    maxAge: 60 * 60 * 24 * 365,
+    path: '/',
+  });
 }
 
 // LOCALE

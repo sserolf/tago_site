@@ -4,9 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "npm run save-json-and-download-images && npm run img-transform && astro check && astro build",
-    "save-json-and-download-images": "node ./scripts/saveJsonAndDownloadImages.js access_token=$IG_ACCESS_TOKEN",
-    "img-transform": "node ./scripts/imgTransform.js"
+    "build": "astro check && astro build"
   },
   "dependencies": {
     "@astrojs/check": "^0.5.6",

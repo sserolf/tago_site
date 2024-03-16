@@ -1,13 +1,51 @@
 ---
+// IMPORTS
+import fs from 'fs';
+
 // IMPORT COMPONENTS
 import TmPost from './TmPost.astro';
 
 // IMPORT TYPES
-import { type Post } from './../types/posts';
+import type { Post, ChildrenData } from '../types/posts';
 
 // IMPORT ALL POSTS
-import allPosts from './../../public/json/igPosts.json';
+import postsJson from '../../public/json/igPosts.json';
+
+// IMPORT UTILS
+import { getAllIgPostsData } from '../utils/igPostsUtils';
+
 const igPostsLimit = 4;
+// let updateImages = false;
+const getPosts = async () => {
+  const currentDateDiff = Date.now() - postsJson.lastDate;
+  const maxHoursToRefresh = 12;
+  if (currentDateDiff < maxHoursToRefresh * 3600 * 1000) {
+    return postsJson.posts as Post[];
+  } else {
+    const posts = await getAllIgPostsData('');
+    fs.writeFileSync(
+      'public/json/igPosts.json',
+      JSON.stringify({ posts, lastDate: Date.now() }, null, 2)
+    );
+    return posts as Post[];
+  }
+};
+const allPosts = await getPosts();
+allPosts.map((post: Post) => {
+  if (post.media_type === 'IMAGE') {
+    post.media_url = 'assets/images/placeholder.webp';
+  }
+  if (post.media_type === 'CAROUSEL_ALBUM' && post.children) {
+    post.children.data.map((child: ChildrenData) => {
+      child.media_url = 'assets/images/placeholder.webp';
+    });
+  }
+});
+// if (allPosts.length != postsJson.posts.length && updateImages) {
+//   transformImages('', true);
+//   transformImages('to_compress/ig', false);
+//   await saveJsonAndDownloadImages(allPosts);
+// }
 const totalPosts: Post[] = allPosts.slice(0, igPostsLimit) as Post[];
 
 // GET ASTRO PROPS
@@ -224,9 +262,19 @@ const dictionary = getDictionary(language);
       posts[i].remove();
     }
   };
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const loquesea = fetch('getIgPosts');
+    loquesea.json().then((data) => {
+      console.log(data);
+    });
+  });
 </script>
 
 <style>
+  img {
+    border-radius: 6px;
+  }
   button {
     border-color: black;
     border-radius: 6px;
