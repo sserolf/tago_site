@@ -9,9 +9,9 @@ import TmPost from './TmPost.astro';
 import type { Post, ChildrenData } from '../types/posts';
 
 // IMPORT ALL POSTS
-fs.existsSync('public/json/igPosts.json') ||
+fs.existsSync('../../public/json/igPosts.json') ||
   fs.writeFileSync(
-    'public/json/igPosts.json',
+    '../../public/json/igPosts.json',
     JSON.stringify({ posts: [], lastDate: new Date().setFullYear(9999) }, null, 2)
   );
 import postsJson from '../../public/json/igPosts.json';
