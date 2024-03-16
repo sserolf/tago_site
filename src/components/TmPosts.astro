@@ -14,7 +14,7 @@ fs.existsSync('../../public/json/igPosts.json') ||
     '../../public/json/igPosts.json',
     JSON.stringify({ posts: [], lastDate: new Date().setFullYear(9999) }, null, 2)
   );
-import postsJson from '../../public/json/igPosts.json';
+const postsJson = JSON.parse(fs.readFileSync('../../public/json/igPosts.json', 'utf-8'));
 
 // IMPORT UTILS
 import { getAllIgPostsData } from '../utils/igPostsUtils';
