@@ -1,7 +1,7 @@
 import fs from 'fs';
 import type { Post } from '../types/posts';
 import { getAllIgPostsImages, downloadIgImages, transformImages } from '../utils/igPostsUtils';
-const igPosts = JSON.parse(fs.readFileSync('../../public/json/igPosts.json', 'utf-8'));
+const igPosts = JSON.parse(fs.readFileSync('public/json/igPosts.json', 'utf-8'));
 
 export async function GET() {
   const lastDate = igPosts.lastDate as number;
