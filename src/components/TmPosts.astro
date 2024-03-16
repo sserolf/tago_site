@@ -29,7 +29,7 @@ const getPosts = async () => {
   } else {
     const posts = await getAllIgPostsData('');
     fs.writeFileSync(
-      'public/json/igPosts.json',
+      '../../public/json/igPosts.json',
       JSON.stringify({ posts, lastDate: Date.now() }, null, 2)
     );
     return posts as Post[];
