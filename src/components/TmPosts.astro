@@ -265,24 +265,24 @@ const dictionary = getDictionary(language);
     }
   };
 
-  document.addEventListener('DOMContentLoaded', function () {
-    const loquesea = () => {
-      fetch('getIgPosts')
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-          const images = document.getElementsByTagName('img');
-          for (let i = 0; i < images.length; i++) {
-            if (images[i].src.indexOf('placeholder') > -1) {
-              data.transformedIgImages.includes(images[i].alt) &&
-                (images[i].src = `assets/images/compressed/${images[i].alt}.webp`);
-            }
-          }
-        })
-        .catch((error) => console.error('Error:', error));
-    };
-    loquesea();
-  });
+  // document.addEventListener('DOMContentLoaded', function () {
+  //   const loquesea = () => {
+  //     fetch('getIgPosts')
+  //       .then((response) => response.json())
+  //       .then((data) => {
+  //         console.log(data);
+  //         const images = document.getElementsByTagName('img');
+  //         for (let i = 0; i < images.length; i++) {
+  //           if (images[i].src.indexOf('placeholder') > -1) {
+  //             data.transformedIgImages.includes(images[i].alt) &&
+  //               (images[i].src = `assets/images/compressed/${images[i].alt}.webp`);
+  //           }
+  //         }
+  //       })
+  //       .catch((error) => console.error('Error:', error));
+  //   };
+  //   loquesea();
+  // });
 </script>
 
 <style>
