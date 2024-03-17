@@ -75,15 +75,17 @@ export const getAllIgPostsImages = async (newUrl: string) => {
 };
 
 export const downloadIgImages = async (images: Post[]) => {
-  if (!fs.existsSync('to_compress/ig')) {
-    fs.mkdirSync('to_compress/ig');
+  const rootPath = process.cwd();
+  const toCompressIgPath = `${rootPath}/to_compress/ig`;
+  if (!fs.existsSync(toCompressIgPath)) {
+    fs.mkdirSync(toCompressIgPath);
   }
   let transform = true;
   const promises = images.map(async (post) => {
     if (post.id && post.media_type === 'IMAGE' && post.media_url) {
       try {
         const response = await axios.get(post.media_url, { responseType: 'arraybuffer' });
-        fs.writeFileSync(`to_compress/ig/${post.id}.png`, response.data);
+        fs.writeFileSync(`${toCompressIgPath}/${post.id}.png`, response.data);
         // eslint-disable-next-line no-console
         console.log(`${post.id} downloaded successfully!`);
       } catch (error) {
@@ -93,7 +95,7 @@ export const downloadIgImages = async (images: Post[]) => {
       const childPromises = post.children.data.map(async (child) => {
         try {
           const response = await axios.get(child.media_url, { responseType: 'arraybuffer' });
-          fs.writeFileSync(`to_compress/ig/${child.id}.png`, response.data);
+          fs.writeFileSync(`${toCompressIgPath}/${child.id}.png`, response.data);
           // eslint-disable-next-line no-console
           console.log(`${child.id} downloaded successfully!`);
         } catch (error) {
@@ -108,9 +110,11 @@ export const downloadIgImages = async (images: Post[]) => {
 };
 
 export const transformImages = async (inputDir: string, removeFolder: boolean) => {
+  const rootPath = process.cwd();
+  const toCompressPath = `${rootPath}/to_compress`;
   // Input and output directories
-  const inputDirDefault = inputDir !== '' ? inputDir : 'to_compress';
-  const outputDir = 'public/assets/images/compressed';
+  const inputDirDefault = inputDir !== '' ? inputDir : toCompressPath;
+  const outputDir = `${rootPath}public/assets/images/compressed`;
 
   const transform = async () => {
     // Get all files in the input directory

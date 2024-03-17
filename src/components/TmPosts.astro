@@ -9,13 +9,14 @@ import TmPost from './TmPost.astro';
 import type { Post, ChildrenData } from '../types/posts';
 
 // IMPORT ALL POSTS
-fs.existsSync('public/json') || fs.mkdirSync('public/json');
-fs.existsSync('public/json/igPosts.json') ||
+const rootPath = process.cwd();
+fs.existsSync(`${rootPath}/public/json`) || fs.mkdirSync(`${rootPath}/public/json`);
+fs.existsSync(`${rootPath}/public/json/igPosts.json`) ||
   fs.writeFileSync(
-    'public/json/igPosts.json',
+    `${rootPath}/public/json/igPosts.json`,
     JSON.stringify({ posts: [], lastDate: new Date().setFullYear(1) }, null, 2)
   );
-const postsJson = JSON.parse(fs.readFileSync('public/json/igPosts.json', 'utf-8'));
+const postsJson = JSON.parse(fs.readFileSync(`${rootPath}/public/json/igPosts.json`, 'utf-8'));
 
 // IMPORT UTILS
 import { getAllIgPostsData } from '../utils/igPostsUtils';
@@ -31,7 +32,7 @@ const getPosts = async () => {
     console.log('Fetching new posts');
     const posts = await getAllIgPostsData('');
     fs.writeFileSync(
-      'public/json/igPosts.json',
+      `${rootPath}/public/json/igPosts.json`,
       JSON.stringify({ posts, lastDate: Date.now() }, null, 2)
     );
     return posts as Post[];

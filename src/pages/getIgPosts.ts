@@ -1,7 +1,8 @@
 import fs from 'fs';
 import type { Post } from '../types/posts';
 import { getAllIgPostsImages, downloadIgImages, transformImages } from '../utils/igPostsUtils';
-const igPosts = JSON.parse(fs.readFileSync('public/json/igPosts.json', 'utf-8'));
+const rootPath = process.cwd();
+const igPosts = JSON.parse(fs.readFileSync(`${rootPath}/public/json/igPosts.json`, 'utf-8'));
 
 export async function GET() {
   const lastDate = igPosts.lastDate as number;
@@ -14,7 +15,10 @@ export async function GET() {
     const transform = await downloadIgImages(images);
     if (transform) {
       const transformedImages: string[] = await transformImages('', true);
-      const transformedIgImages: string[] = await transformImages('to_compress/ig', false);
+      const transformedIgImages: string[] = await transformImages(
+        `${rootPath}/to_compress/ig`,
+        false,
+      );
       return new Response(JSON.stringify({ transformedImages, transformedIgImages }));
     }
   } else {
