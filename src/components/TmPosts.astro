@@ -9,10 +9,11 @@ import TmPost from './TmPost.astro';
 import type { Post, ChildrenData } from '../types/posts';
 
 // IMPORT ALL POSTS
+fs.existsSync('public/json') || fs.mkdirSync('public/json');
 fs.existsSync('public/json/igPosts.json') ||
   fs.writeFileSync(
     'public/json/igPosts.json',
-    JSON.stringify({ posts: [], lastDate: new Date().setFullYear(9999) }, null, 2)
+    JSON.stringify({ posts: [], lastDate: new Date().setFullYear(1) }, null, 2)
   );
 const postsJson = JSON.parse(fs.readFileSync('public/json/igPosts.json', 'utf-8'));
 
@@ -25,8 +26,11 @@ const getPosts = async () => {
   const currentDateDiff = Date.now() - postsJson.lastDate;
   const maxHoursToRefresh = 12;
   if (currentDateDiff < maxHoursToRefresh * 3600 * 1000) {
+    console.log(currentDateDiff, maxHoursToRefresh * 3600 * 1000);
+    console.log('Using cached posts');
     return postsJson.posts as Post[];
   } else {
+    console.log('Fetching new posts');
     const posts = await getAllIgPostsData('');
     fs.writeFileSync(
       'public/json/igPosts.json',
