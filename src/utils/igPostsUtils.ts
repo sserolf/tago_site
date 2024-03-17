@@ -195,7 +195,7 @@ export const transformImages = async (inputDir: string, removeFolder: boolean) =
             }
           });
       }
-      transformedImages.push(`${fileName}.webp`);
+      transformedImages.push(fileName);
     });
     return transformedImages;
   };

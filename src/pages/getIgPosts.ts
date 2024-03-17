@@ -15,10 +15,7 @@ export async function GET() {
     if (transform) {
       const transformedImages: string[] = await transformImages('', true);
       const transformedIgImages: string[] = await transformImages('to_compress/ig', false);
-      return {
-        transformedImages: JSON.stringify(transformedImages),
-        transformedIgImages: JSON.stringify(transformedIgImages),
-      };
+      return new Response(JSON.stringify({ transformedImages, transformedIgImages }));
     }
   } else {
     return new Response('no ha pasao un minuto, surmano');
