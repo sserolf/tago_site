@@ -9,14 +9,13 @@ import TmPost from './TmPost.astro';
 import type { Post, ChildrenData } from '../types/posts';
 
 // IMPORT ALL POSTS
-const rootPath = process.cwd();
-fs.existsSync(`${rootPath}/public/json`) || fs.mkdirSync(`${rootPath}/public/json`);
-fs.existsSync(`${rootPath}/public/json/igPosts.json`) ||
+fs.existsSync('public/json') || fs.mkdirSync('public/json');
+fs.existsSync('public/json/igPosts.json') ||
   fs.writeFileSync(
-    `${rootPath}/public/json/igPosts.json`,
+    'public/json/igPosts.json',
     JSON.stringify({ posts: [], lastDate: new Date().setFullYear(1) }, null, 2)
   );
-const postsJson = JSON.parse(fs.readFileSync(`${rootPath}/public/json/igPosts.json`, 'utf-8'));
+const postsJson = JSON.parse(fs.readFileSync('public/json/igPosts.json', 'utf-8'));
 
 // IMPORT UTILS
 import { getAllIgPostsData } from '../utils/igPostsUtils';
@@ -32,7 +31,7 @@ const getPosts = async () => {
     console.log('Fetching new posts');
     const posts = await getAllIgPostsData('');
     fs.writeFileSync(
-      `${rootPath}/public/json/igPosts.json`,
+      'public/json/igPosts.json',
       JSON.stringify({ posts, lastDate: Date.now() }, null, 2)
     );
     return posts as Post[];
@@ -266,23 +265,30 @@ const dictionary = getDictionary(language);
     }
   };
 
-  // document.addEventListener('DOMContentLoaded', function () {
-  //   const loquesea = () => {
+  // document.addEventListener('DOMContentLoaded', () => {
+  //   const localStorageIgPosts = localStorage.getItem('igPosts');
+  //   let jsonPosts;
+  //   if (localStorageIgPosts && localStorageIgPosts.lastDate > Date.now() - 12 * 3600 * 1000) {
+  //     jsonPosts = JSON.parse(localStorageIgPosts);
+  //     console.log(jsonPosts);
+  //   } else {
   //     fetch('getIgPosts')
   //       .then((response) => response.json())
   //       .then((data) => {
+  //         jsonPosts = data;
   //         console.log(data);
-  //         const images = document.getElementsByTagName('img');
-  //         for (let i = 0; i < images.length; i++) {
-  //           if (images[i].src.indexOf('placeholder') > -1) {
-  //             data.transformedIgImages.includes(images[i].alt) &&
-  //               (images[i].src = `assets/images/compressed/${images[i].alt}.webp`);
-  //           }
-  //         }
   //       })
   //       .catch((error) => console.error('Error:', error));
-  //   };
-  //   loquesea();
+  //   }
+  //   const images = document.getElementsByTagName('img');
+  //   for (let i = 0; i < images.length; i++) {
+  //     if (images[i].src.indexOf('placeholder') > -1) {
+  //       data &&
+  //         data.transformedIgImages &&
+  //         data.transformedIgImages.includes(images[i].alt) &&
+  //         (images[i].src = `/assets/images/compressed/${images[i].alt}.webp`);
+  //     }
+  //   }
   // });
 </script>
 

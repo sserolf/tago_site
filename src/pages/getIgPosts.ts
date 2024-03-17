@@ -1,8 +1,7 @@
-import fs from 'fs';
 import type { Post } from '../types/posts';
 import { getAllIgPostsImages, downloadIgImages, transformImages } from '../utils/igPostsUtils';
 const rootPath = process.cwd();
-const igPosts = JSON.parse(fs.readFileSync('../../public/json/igPosts.json', 'utf-8'));
+import igPosts from 'json/igPosts.json';
 
 export async function GET() {
   const lastDate = igPosts.lastDate as number;
@@ -22,6 +21,6 @@ export async function GET() {
       return new Response(JSON.stringify({ transformedImages, transformedIgImages }));
     }
   } else {
-    return new Response('no ha pasao un minuto, surmano');
+    return new Response(JSON.stringify('no ha pasao un minuto, surmano'));
   }
 }

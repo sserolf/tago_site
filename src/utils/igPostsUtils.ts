@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'node:fs';
 import axios from 'axios';
 import sharp from 'sharp';
 
@@ -75,8 +75,7 @@ export const getAllIgPostsImages = async (newUrl: string) => {
 };
 
 export const downloadIgImages = async (images: Post[]) => {
-  const rootPath = process.cwd();
-  const toCompressIgPath = `${rootPath}/to_compress/ig`;
+  const toCompressIgPath = 'to_compress/ig';
   if (!fs.existsSync(toCompressIgPath)) {
     fs.mkdirSync(toCompressIgPath);
   }
@@ -110,11 +109,10 @@ export const downloadIgImages = async (images: Post[]) => {
 };
 
 export const transformImages = async (inputDir: string, removeFolder: boolean) => {
-  const rootPath = process.cwd();
-  const toCompressPath = `${rootPath}/to_compress`;
+  const toCompressPath = 'to_compress';
   // Input and output directories
   const inputDirDefault = inputDir !== '' ? inputDir : toCompressPath;
-  const outputDir = `${rootPath}public/assets/images/compressed`;
+  const outputDir = 'public/assets/images/compressed';
 
   const transform = async () => {
     // Get all files in the input directory
