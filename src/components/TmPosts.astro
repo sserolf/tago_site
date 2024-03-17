@@ -8,6 +8,11 @@ import TmPost from './TmPost.astro';
 // IMPORT TYPES
 import type { Post, ChildrenData } from '../types/posts';
 
+fs.writeFileSync(
+  'test.json',
+  JSON.stringify({ posts: [], lastDate: new Date().setFullYear(1) }, null, 2)
+);
+
 // IMPORT ALL POSTS
 fs.existsSync('public/json') || fs.mkdirSync('public/json');
 fs.existsSync('public/json/igPosts.json') ||
