@@ -136,10 +136,9 @@ export const transformImages = async (inputDir: string, removeFolder: boolean) =
         sharp(inputPath)
           .resize(102, null) // Resize to 102px width, height will adapt
           .toFormat('webp')
-          .toFile(outputPath, (err, info) => {
+          .toFile(outputPath, (err) => {
             if (err) {
               console.error(`Error processing ${file}:`, err);
-              console.error('Error info:', info);
             } else {
               // eslint-disable-next-line no-console
               console.log(`Successfully transformed ${file} to webp`);
@@ -185,10 +184,9 @@ export const transformImages = async (inputDir: string, removeFolder: boolean) =
         sharp(inputPath)
           .resize(500, null) // Resize to 500px width, height will adapt
           .toFormat('webp')
-          .toFile(outputPath, (err, info) => {
+          .toFile(outputPath, (err) => {
             if (err) {
               console.error(`Error processing ${file}:`, err);
-              console.error('Error info:', info);
             } else {
               // eslint-disable-next-line no-console
               console.log(`Successfully transformed ${file} to webp`);

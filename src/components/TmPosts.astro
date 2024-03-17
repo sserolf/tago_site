@@ -26,8 +26,6 @@ const getPosts = async () => {
   const currentDateDiff = Date.now() - postsJson.lastDate;
   const maxHoursToRefresh = 12;
   if (currentDateDiff < maxHoursToRefresh * 3600 * 1000) {
-    console.log(currentDateDiff, maxHoursToRefresh * 3600 * 1000);
-    console.log('Using cached posts');
     return postsJson.posts as Post[];
   } else {
     console.log('Fetching new posts');
@@ -50,11 +48,6 @@ allPosts.map((post: Post) => {
     });
   }
 });
-// if (allPosts.length != postsJson.posts.length && updateImages) {
-//   transformImages('', true);
-//   transformImages('to_compress/ig', false);
-//   await saveJsonAndDownloadImages(allPosts);
-// }
 const totalPosts: Post[] = allPosts.slice(0, igPostsLimit) as Post[];
 
 // GET ASTRO PROPS
@@ -282,7 +275,7 @@ const dictionary = getDictionary(language);
           for (let i = 0; i < images.length; i++) {
             if (images[i].src.indexOf('placeholder') > -1) {
               data.transformedIgImages.includes(images[i].alt) &&
-                (images[i].src = `../assets/images/compressed/${images[i].alt}.webp`);
+                (images[i].src = `assets/images/compressed/${images[i].alt}.webp`);
             }
           }
         })
