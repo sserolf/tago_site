@@ -2,8 +2,8 @@ export interface Post {
   caption?: string;
   timestamp: string;
   permalink?: string;
-  media_type?: MediaType;
-  media_url: string;
+  media_type?: string;
+  media_url?: string;
   id?: string;
   children?: Children;
   title?: string;
@@ -15,14 +15,8 @@ export interface Children {
 }
 
 export interface ChildrenData {
+  media_type: string;
   media_url: string;
-  media_type: MediaType;
   id: string;
   aspect_ratio?: string;
-}
-
-enum MediaType {
-  CarouselAlbum = 'CAROUSEL_ALBUM',
-  Image = 'IMAGE',
-  Video = 'VIDEO',
 }

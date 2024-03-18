@@ -9,7 +9,7 @@ if (type === 'CAROUSEL_ALBUM') {
 } else if (type === 'VIDEO') {
   video = media;
 } else {
-  let imagePath = media;
+  let imagePath = 'assets/images/placeholder.webp';
   image = imagePath;
 }
 const formatAspectRatio = (aspect_ratio: string) => {
@@ -54,7 +54,7 @@ const formattedLocaleDate = formattedDate.toLocaleDateString(locale.replace('_',
       if (carouselItem.media_type === 'VIDEO') {
         return <video src={carouselItem.media_url} controls />;
       } else if (carouselItem.media_type === 'IMAGE') {
-        let imagePath = carouselItem.media_url;
+        let imagePath = 'assets/images/placeholder.webp';
         return (
           <img
             loading="lazy"
