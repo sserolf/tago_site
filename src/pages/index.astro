@@ -19,7 +19,7 @@ const acceptLanguage = Astro.request.headers
 // LANGUAGE
 let language: AvailableLanguages = 'ES';
 if (cookieLanguage) {
-  language = cookieLanguage;
+  language = cookieLanguage || 'ES';
 } else {
   language = (acceptLanguage as AvailableLanguages) || 'ES';
   Astro.cookies.set('language', language, {
