@@ -1,48 +1,16 @@
 ---
 // IMPORT COMPONENTS
-import TmPost from './TmPost.astro';
+import TmPost from 'src/components/TmPost.astro';
 
 // IMPORT TYPES
-import type { Post, ChildrenData } from '../types/posts';
-
-// IMPORT ALL POSTS
-import postsJson from '../json/igPosts.json';
-
-// IMPORT UTILS
-// import { getAllIgPostsData } from '../utils/igPostsUtils';
-
-const igPostsLimit = 4;
-// let updateImages = false;
-// const getPosts = async () => {
-//   const currentDateDiff = Date.now() - postsJson.lastDate;
-//   const maxHoursToRefresh = 12;
-//   if (currentDateDiff < maxHoursToRefresh * 3600 * 1000) {
-//     return postsJson.posts as Post[];
-//   } else {
-//     console.log('Fetching new posts');
-//     const posts = await getAllIgPostsData('');
-//     fs.writeFileSync(
-//       'public/json/igPosts.json',
-//       JSON.stringify({ posts, lastDate: Date.now() }, null, 2)
-//     );
-//     return posts as Post[];
-//   }
-// };
-const allPosts = postsJson.posts as Post[];
-// allPosts.map((post: Post) => {
-//   if (post.media_type === 'IMAGE') {
-//     post.media_url = 'assets/images/placeholder.webp';
-//   }
-//   if (post.media_type === 'CAROUSEL_ALBUM' && post.children) {
-//     post.children.data.map((child: ChildrenData) => {
-//       child.media_url = 'assets/images/placeholder.webp';
-//     });
-//   }
-// });
-const totalPosts: Post[] = allPosts.slice(0, igPostsLimit) as Post[];
+// import type { Post, ChildrenData } from 'src/types/posts';
 
 // GET ASTRO PROPS
 const { locale, language } = Astro.props;
+
+// IMPORT ALL POSTS
+import { getIgPosts } from 'src/utils/igPostsUtils';
+const { posts } = await getIgPosts(locale, 4);
 
 // IMPORT DICTIONARY
 import { getDictionary } from '../locales/getDictionary';
@@ -50,21 +18,18 @@ const dictionary = getDictionary(language);
 ---
 
 {
-  totalPosts.map((post, count) => {
+  posts.map((post, count) => {
     if (count < 3) {
       return (
         <article class="post">
           <TmPost
-            locale={locale}
-            timestamp={post.timestamp}
+            timestamp={post.dateToShow}
             permalink={post.permalink}
-            media={post.children ? post.children.data : post.media_url}
+            media={post.children ? post.children_elements : post.media_url}
             caption={post.caption}
             type={post.media_type}
             id={post.id}
             title={post.title}
-            language={language}
-            aspect_ratio={post.aspect_ratio}
           />
         </article>
       );
@@ -73,16 +38,13 @@ const dictionary = getDictionary(language);
         <>
           <article class="post">
             <TmPost
-              locale={locale}
-              timestamp={post.timestamp}
+              timestamp={post.dateToShow}
               permalink={post.permalink}
-              media={post.children ? post.children.data : post.media_url}
+              media={post.children ? post.children_elements : post.media_url}
               caption={post.caption}
               type={post.media_type}
               id={post.id}
               title={post.title}
-              language={language}
-              aspect_ratio={post.aspect_ratio}
             />
           </article>
           <div id="postNavigationButtons">
@@ -106,7 +68,7 @@ const dictionary = getDictionary(language);
 
   const createTitleSpanElement = (post) => {
     const span = document.createElement('span');
-    span.innerText = `${new Date(post.timestamp).toLocaleDateString()} - IG POST`;
+    span.innerText = `${post.dateToShow} - IG POST`;
     span.onclick = () => open(post.permalink);
     span.style.color = 'purple';
     span.style.fontSize = '1.25em';
@@ -118,7 +80,7 @@ const dictionary = getDictionary(language);
 
   const createSpanElement = (post) => {
     const span = document.createElement('span');
-    const timestamp = new Date(post.timestamp).toLocaleDateString();
+    const timestamp = post.dateToShow;
     const title = post.title;
     const separator = title !== '' ? ' - ' : '';
     span.innerText = `${timestamp}${separator}${title}`;
@@ -135,7 +97,7 @@ const dictionary = getDictionary(language);
 
   const createImgElement = (post) => {
     const img = document.createElement('img');
-    location.pathname.length > 1 ? (img.src = `../${post.media_url}`) : (img.src = post.media_url);
+    img.src = post.media_url;
     img.alt = post.id ? post.id : post.title ? post.title : 'alt';
     img.style.width = '100%';
     img.style.aspectRatio = post.aspect_ratio;
@@ -171,7 +133,7 @@ const dictionary = getDictionary(language);
         const video = createVideoElement(post);
         article.appendChild(video);
       } else if (post.media_type === 'CAROUSEL_ALBUM') {
-        post.children.data.map((child) => {
+        post.children_elements.map((child) => {
           if (child.media_type === 'IMAGE') {
             const img = createImgElement(child);
             article.appendChild(img);
@@ -205,7 +167,7 @@ const dictionary = getDictionary(language);
   const moreNewsButton = document.getElementById('moreNews');
   if (moreNewsButton)
     moreNewsButton.onclick = async () => {
-      const jsonPosts = await getJsonPosts();
+      const jsonPosts = await getPosts();
       addMoreNews(jsonPosts.posts, jsonPosts.length);
     };
 
@@ -230,19 +192,23 @@ const dictionary = getDictionary(language);
     if (button) button.style.display = 'block';
   };
 
-  const getJsonPosts = async () => {
-    let data;
-    if (localStorage.getItem('igPosts')) {
-      data = JSON.parse(localStorage.getItem('igPosts'));
+  const getPosts = async () => {
+    let posts;
+    if (localStorage.getItem('posts')) {
+      posts = JSON.parse(localStorage.getItem('posts'));
     } else {
-      const jsonPath = location.pathname.length > 1 ? '../json/igPosts.json' : 'json/igPosts.json';
-      const response = await fetch(jsonPath);
-      data = await response.json();
-      localStorage.setItem('igPosts', JSON.stringify(data));
+      const jsonPath = 'posts.json';
+      const response = await fetch(
+        `${jsonPath}?${new URLSearchParams({
+          locale: document.getElementsByName('og:locale')[0].content,
+        })}`
+      ).then((response) => response.json());
+      localStorage.setItem('posts', JSON.stringify(response.posts));
+      posts = response.posts;
     }
-    const posts = document.getElementsByClassName('post');
-    const dataToAppend = data.slice(posts.length, posts.length + 4);
-    return { posts: dataToAppend, length: data.length };
+    const postsShowing = document.getElementsByClassName('post');
+    const dataToAppend = posts.slice(postsShowing.length, postsShowing.length + 4);
+    return { posts: dataToAppend, length: pastGigs.length };
   };
 
   window.onbeforeunload = () => {
@@ -256,31 +222,31 @@ const dictionary = getDictionary(language);
     }
   };
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const localStorageIgPosts = localStorage.getItem('igPosts');
-    let jsonPosts;
-    if (localStorageIgPosts && localStorageIgPosts.lastDate > Date.now() - 12 * 3600 * 1000) {
-      jsonPosts = JSON.parse(localStorageIgPosts);
-      console.log(jsonPosts);
-    } else {
-      fetch('getIgPosts')
-        .then((response) => response.json())
-        .then((data) => {
-          jsonPosts = data.result;
-          const images = document.getElementsByTagName('img');
-          for (let i = 0; i < images.length; i++) {
-            if (images[i].src.indexOf('placeholder') > -1) {
-              jsonPosts.map((post) => {
-                if (post.id === images[i].alt) {
-                  images[i].src = post.media_url;
-                }
-              });
-            }
-          }
-        })
-        .catch((error) => console.error('Error:', error));
-    }
-  });
+  // document.addEventListener('DOMContentLoaded', () => {
+  //   const localStorageIgPosts = localStorage.getItem('igPosts');
+  //   let jsonPosts;
+  //   if (localStorageIgPosts && localStorageIgPosts.lastDate > Date.now() - 12 * 3600 * 1000) {
+  //     jsonPosts = JSON.parse(localStorageIgPosts);
+  //     console.log(jsonPosts);
+  //   } else {
+  //     fetch('getIgPosts')
+  //       .then((response) => response.json())
+  //       .then((data) => {
+  //         jsonPosts = data.result;
+  //         const images = document.getElementsByTagName('img');
+  //         for (let i = 0; i < images.length; i++) {
+  //           if (images[i].src.indexOf('placeholder') > -1) {
+  //             jsonPosts.map((post) => {
+  //               if (post.id === images[i].alt) {
+  //                 images[i].src = post.media_url;
+  //               }
+  //             });
+  //           }
+  //         }
+  //       })
+  //       .catch((error) => console.error('Error:', error));
+  //   }
+  // });
 </script>
 
 <style>

@@ -1,6 +1,6 @@
 ---
-const { locale, timestamp, permalink, media, caption, type, id, title, aspect_ratio } = Astro.props;
-import type { ChildrenData } from '../types/posts';
+const { timestamp, permalink, media, caption, type, id, title } = Astro.props;
+import type { ChildrenData } from 'src/types/posts';
 let carousel: ChildrenData[] = [],
   video,
   image;
@@ -9,18 +9,10 @@ if (type === 'CAROUSEL_ALBUM') {
 } else if (type === 'VIDEO') {
   video = media;
 } else {
-  let imagePath = 'assets/images/placeholder.webp';
-  image = imagePath;
+  // let imagePath = 'assets/images/placeholder.webp';
+  // image = imagePath;
+  image = media;
 }
-const formatAspectRatio = (aspect_ratio: string) => {
-  return aspect_ratio ? 'aspect-ratio: ' + aspect_ratio : 'auto';
-};
-const formattedDate: Date = new Date(timestamp);
-const formattedLocaleDate = formattedDate.toLocaleDateString(locale.replace('_', '-'), {
-  year: 'numeric',
-  month: '2-digit',
-  day: '2-digit',
-});
 ---
 
 {
@@ -30,23 +22,14 @@ const formattedLocaleDate = formattedDate.toLocaleDateString(locale.replace('_',
       onclick="window.open(this.attributes['data-href'].value)"
       data-href={permalink}
     >
-      {formattedLocaleDate} IG POST
+      {timestamp} IG POST
     </span>
   )
 }
-{title && <span class="igPost">{`${formattedLocaleDate} - ${title}`}</span>}
-{!permalink && !title && <span class="igPost">{formattedLocaleDate}</span>}
+{title && <span class="igPost">{`${timestamp} - ${title}`}</span>}
+{!permalink && !title && <span class="igPost">{timestamp}</span>}
 <p>{caption}</p>
-{
-  image && (
-    <img
-      loading="lazy"
-      style={formatAspectRatio(aspect_ratio)}
-      src={image}
-      alt={title ? title : id ? id : 'alt'}
-    />
-  )
-}
+{image && <img loading="lazy" src={image} alt={title ? title : id ? id : 'alt'} />}
 {video && <video src={video} controls />}
 {
   carousel &&
@@ -54,12 +37,14 @@ const formattedLocaleDate = formattedDate.toLocaleDateString(locale.replace('_',
       if (carouselItem.media_type === 'VIDEO') {
         return <video src={carouselItem.media_url} controls />;
       } else if (carouselItem.media_type === 'IMAGE') {
-        let imagePath = 'assets/images/placeholder.webp';
+        // let imagePath = 'assets/images/placeholder.webp';
+        // return (
+        //   <img loading="lazy" src={imagePath} alt={carouselItem.id ? carouselItem.id : 'alt'} />
+        // );
         return (
           <img
             loading="lazy"
-            style={carouselItem.aspect_ratio && formatAspectRatio(carouselItem.aspect_ratio)}
-            src={imagePath}
+            src={carouselItem.media_url}
             alt={carouselItem.id ? carouselItem.id : 'alt'}
           />
         );

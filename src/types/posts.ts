@@ -7,7 +7,6 @@ export interface Post {
   id?: string;
   children?: Children;
   title?: string;
-  aspect_ratio?: string;
 }
 
 export interface Children {
@@ -18,5 +17,5 @@ export interface ChildrenData {
   media_type: string;
   media_url: string;
   id: string;
-  aspect_ratio?: string;
+  parentId: string;
 }

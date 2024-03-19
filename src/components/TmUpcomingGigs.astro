@@ -1,19 +1,15 @@
 ---
 import { type Gig } from '../types/gigs';
-import { formatUpcomingGigsDates } from 'src/utils/gigsUtils';
 
 interface Props {
   data: Gig[];
-  locale: string;
 }
 
-const { data, locale } = Astro.props;
-
-const formattedData = formatUpcomingGigsDates(data, locale);
+const { data } = Astro.props;
 ---
 
 {
-  formattedData.map((gig) => {
+  data.map((gig: Gig) => {
     return (
       <li>
         <>

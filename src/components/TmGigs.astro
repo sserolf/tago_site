@@ -1,20 +1,21 @@
 ---
-import type { AvailableLanguages } from 'src/types/language';
+import type { AvailableLanguages, AvailableLocales } from 'src/types/language';
 import TmPastGigs from './TmPastGigs.astro';
 import TmUpcomingGigs from './TmUpcomingGigs.astro';
 import { type Gig } from './../types/gigs';
-import gigs from '../../src/json/gigs.json';
-import { splitGigs } from '../utils/gigsUtils';
+import { getGigs } from '../utils/gigsUtils';
 interface Props {
   data: string;
   pastGigsTitle: string;
   upcomingGigsTitle: string;
   language: AvailableLanguages;
-  locale: string;
+  locale: AvailableLocales;
 }
 const { data, pastGigsTitle, upcomingGigsTitle, language, locale } = Astro.props;
 
-const { upcomingGigs, pastGigs }: { upcomingGigs: Gig[]; pastGigs: Gig[] } = splitGigs(gigs);
+const gigsRequest = await getGigs(locale);
+const gigs = gigsRequest as { upcomingGigs: Gig[]; pastGigs: Gig[] };
+const { upcomingGigs, pastGigs }: { upcomingGigs: Gig[]; pastGigs: Gig[] } = gigs;
 ---
 
 <span class="title section">{data}</span>
@@ -24,7 +25,7 @@ const { upcomingGigs, pastGigs }: { upcomingGigs: Gig[]; pastGigs: Gig[] } = spl
     <div>
       <span class="title gigs">{upcomingGigsTitle}</span>
       <ul id="upcomingGigs">
-        <TmUpcomingGigs data={upcomingGigs} locale={locale} />
+        <TmUpcomingGigs data={upcomingGigs} />
       </ul>
     </div>
   )

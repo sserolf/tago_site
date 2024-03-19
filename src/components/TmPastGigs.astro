@@ -2,7 +2,6 @@
 import { getDictionary } from 'src/locales/getDictionary';
 import type { Gig } from 'src/types/gigs';
 import type { AvailableLanguages } from 'src/types/language';
-import { formatPastGigsDates } from 'src/utils/gigsUtils';
 
 interface Props {
   data: Gig[];
@@ -14,9 +13,7 @@ const { data, language, locale } = Astro.props;
 
 const pastGigsLimit = 4;
 
-const formattedData = formatPastGigsDates(data, locale);
-
-const slicedData = formattedData.slice(0, pastGigsLimit);
+const slicedData = data.slice(0, pastGigsLimit);
 const dictionary = getDictionary(language);
 ---
 
@@ -34,7 +31,7 @@ const dictionary = getDictionary(language);
           ) : (
             <span>{gig.name}</span>
           )}
-          <span>{gig.date}</span>
+          <span>{gig.dateToShow}</span>
         </li>
         {isLastGig && (
           <li>
@@ -132,79 +129,23 @@ const dictionary = getDictionary(language);
       closeGigs();
     };
 
-  const splitGigs = (gigs) => {
-    const upcomingGigs = [];
-    const pastGigs = [];
-    gigs.map((gig) => {
-      const dateString = gig.date;
-      const [month, day, year] = dateString.split('/');
-      const date = new Date();
-      date.setDate(Number(day));
-      date.setMonth(Number(month) - 1);
-      date.setFullYear(Number(year));
-
-      date.getTime() < new Date().getTime() ? pastGigs.push(gig) : upcomingGigs.push(gig);
-    });
-    return { upcomingGigs: upcomingGigs, pastGigs: pastGigs };
-  };
-
-  const transformInDate = (date) => {
-    const [month, day, year] = date.split('/');
-    const newDate = new Date();
-    newDate.setDate(Number(day));
-    newDate.setMonth(Number(month) - 1);
-    newDate.setFullYear(Number(year));
-    return newDate;
-  };
-
-  const sortGigs = (gigs, type) => {
-    const sortedGigs = gigs.sort((a, b) => {
-      const dateA = transformInDate(a.date);
-      const dateB = transformInDate(b.date);
-      if (type === 'past') {
-        return dateB.getTime() - dateA.getTime();
-      } else {
-        return dateA.getTime() - dateB.getTime();
-      }
-    });
-    return sortedGigs;
-  };
-
-  const formatPastGigsDates = (gigs, locale) => {
-    const sortedData = sortGigs(gigs, 'past');
-    sortedData.map((gig) => {
-      gig.dateToShow = new Date(gig.date).toLocaleDateString(locale.replace('_', '-'), {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-      });
-    });
-    return sortedData;
-  };
-
   const getJsonGigs = async () => {
-    let data;
-    if (localStorage.getItem('pastGig')) {
-      data = JSON.parse(localStorage.getItem('pastGig'));
+    let pastGigs;
+    if (localStorage.getItem('gigs')) {
+      pastGigs = JSON.parse(localStorage.getItem('gigs')).gigs.pastGigs;
     } else {
-      const jsonPath = location.pathname.length > 1 ? '../json/gigs.json' : 'json/gigs.json';
-      const response = await fetch(jsonPath);
-      data = await response.json();
-      localStorage.setItem('gigs', JSON.stringify(data));
+      const jsonPath = 'gigs.json';
+      const response = await fetch(
+        `${jsonPath}?${new URLSearchParams({
+          locale: document.getElementsByName('og:locale')[0].content,
+        })}`
+      ).then((response) => response.json());
+      localStorage.setItem('gigs', JSON.stringify(response));
+      pastGigs = response.gigs.pastGigs;
     }
-    const pastGigs = splitGigs(data).pastGigs;
-    const reversedData = pastGigs.reverse();
-    const filteredPastGigs = formatPastGigsDates(
-      reversedData,
-      document.getElementsByName('og:locale')[0].content,
-    );
     const gigs = document.getElementsByClassName('pastGig');
-    const dataToAppend = filteredPastGigs.slice(gigs.length, gigs.length + 4);
-    return { gigs: dataToAppend, length: filteredPastGigs.length };
-  };
-
-  window.onbeforeunload = () => {
-    localStorage.removeItem('gigs');
+    const dataToAppend = pastGigs.slice(gigs.length, gigs.length + 4);
+    return { gigs: dataToAppend, length: pastGigs.length };
   };
 
   const removeGigs = () => {
@@ -212,6 +153,10 @@ const dictionary = getDictionary(language);
     for (let i = gigs.length - 1; i > 3; i--) {
       gigs[i].remove();
     }
+  };
+
+  window.onbeforeunload = () => {
+    localStorage.removeItem('gigs');
   };
 </script>
 
