@@ -1,3 +1,4 @@
+import type { AvailableLocales } from 'src/types/language';
 import { getIgPosts } from 'src/utils/igPostsUtils';
 
 export async function GET(request: Request) {

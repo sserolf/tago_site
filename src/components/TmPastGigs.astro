@@ -6,10 +6,9 @@ import type { AvailableLanguages } from 'src/types/language';
 interface Props {
   data: Gig[];
   language: AvailableLanguages;
-  locale: string;
 }
 
-const { data, language, locale } = Astro.props;
+const { data, language } = Astro.props;
 
 const pastGigsLimit = 4;
 

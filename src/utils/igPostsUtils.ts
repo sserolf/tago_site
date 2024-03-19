@@ -1,5 +1,6 @@
 import { turso } from 'src/utils/turso';
-import type { Post } from 'src/types/posts';
+import type { Children, ChildrenData, Post } from 'src/types/posts';
+import type { AvailableLocales } from 'src/types/language';
 
 export const getAllIgPosts = async (newUrl: string) => {
   const access_token: string = import.meta.env.IG_ACCESS_TOKEN as string;
@@ -37,7 +38,10 @@ export const getAllIgPosts = async (newUrl: string) => {
   }
 };
 
-export const getIgPosts = async (locale: AvailableLocales, limit: number | undefined) => {
+export const getIgPosts = async (
+  locale: AvailableLocales | undefined,
+  limit: number | undefined,
+) => {
   const lastUpdated = await fetchDbLastUpdated();
   const diff = Date.now() - parseInt(lastUpdated);
   const twelveHours = 1000 * 60 * 60 * 12;
@@ -49,13 +53,14 @@ export const getIgPosts = async (locale: AvailableLocales, limit: number | undef
     igPosts.map(async (post) => {
       const timestamp = new Date(post.timestamp).getTime().toString();
       const hasChildren =
-        post.children && post.children.data.length > 0
-          ? post.children.data.length.toString()
+        post.children && (post.children as Children).data.length > 0
+          ? (post.children as Children).data.length.toString()
           : null;
       insertDbPost(post, timestamp, hasChildren);
-      post.children.data.map(async (child) => {
-        insertDbChild(child, post.id);
-      });
+      if (post.children)
+        (post.children as Children).data.map(async (child) => {
+          insertDbChild(child, post.id);
+        });
     });
     updateLastUpdated();
     const posts = await fetchDbPosts(locale, limit);
@@ -66,7 +71,7 @@ export const getIgPosts = async (locale: AvailableLocales, limit: number | undef
   }
 };
 
-const fetchDbPosts = async (locale: AvailableLocales, limit: number | undefined) => {
+const fetchDbPosts = async (locale: AvailableLocales | undefined, limit: number | undefined) => {
   let postsResult;
   if (limit) {
     postsResult = await turso.execute(
@@ -77,9 +82,19 @@ const fetchDbPosts = async (locale: AvailableLocales, limit: number | undefined)
   }
   const posts = postsResult.rows;
   const children = await fetchDbChildren();
+  const postsWithChildren: Post[] = [];
   locale &&
-    posts.map((post: Post) => {
-      post.dateToShow = new Date(parseInt(post.date_timestamp)).toLocaleDateString(
+    posts.map((post) => {
+      const newPost: Post = {} as Post;
+      newPost.id = post.id as string;
+      newPost.caption = post.caption as string;
+      newPost.date_timestamp = post.date_timestamp as string;
+      newPost.permalink = post.permalink as string;
+      newPost.media_type = post.media_type as string;
+      newPost.media_url = post.media_url as string;
+      newPost.title = post.title as string;
+      newPost.children = post.children !== null ? parseInt(post.children as string) : 0;
+      newPost.dateToShow = new Date(parseInt(post.date_timestamp as string)).toLocaleDateString(
         locale.replace('_', '-'),
         {
           year: 'numeric',
@@ -88,15 +103,16 @@ const fetchDbPosts = async (locale: AvailableLocales, limit: number | undefined)
         },
       );
       if (post.children) {
-        post.children_elements = [];
+        newPost.children_elements = [];
         children.map((child) => {
           if (child.parentId === post.id) {
-            post.children_elements.push(child);
+            newPost.children_elements.push(child as unknown as ChildrenData);
           }
         });
       }
+      postsWithChildren.push(newPost);
     });
-  return posts;
+  return postsWithChildren;
 };
 
 const fetchDbChildren = async () => {
@@ -127,7 +143,7 @@ const insertDbPost = async (post: Post, timestamp: string, hasChildren: string |
   });
 };
 
-const insertDbChild = async (child: ChildrenData, parentId: string) => {
+const insertDbChild = async (child: ChildrenData, parentId: Post['id']) => {
   await turso.execute({
     sql: 'INSERT OR IGNORE INTO posts (id, parentId, media_type, media_url) VALUES (?, ?, ?, ?)',
     args: [
