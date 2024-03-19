@@ -7,9 +7,9 @@ import Components from '../layouts/Components.astro';
 import type { AvailableLanguages, AvailableLocales } from '../types/language';
 
 // LANGUAGE COOKIE
-const cookieLanguage: AvailableLanguages = Astro.cookies.get('language')
-  ?.value as AvailableLanguages;
-console.log('cookieLanguage:', cookieLanguage);
+const cookieLanguage: AvailableLanguages = Astro.cookies
+  .get('language')
+  ?.value.split('-')[0] as AvailableLanguages;
 
 // LANGUAGE HEADER
 const acceptedLanguage = Astro.request.headers
@@ -17,20 +17,18 @@ const acceptedLanguage = Astro.request.headers
   ?.split('-')[0]
   ?.split(',')[0]
   .toUpperCase() as AvailableLanguages;
-console.log('acceptLanguage:', acceptedLanguage);
 
 // LANGUAGE
 let language: AvailableLanguages = 'ES';
 if (cookieLanguage) {
-  language = cookieLanguage || 'ES';
+  language = cookieLanguage.split('-')[0] || 'ES';
 } else {
-  language = (acceptedLanguage as AvailableLanguages) || 'ES';
+  language = (acceptedLanguage.split('-')[0] as AvailableLanguages) || 'ES';
   Astro.cookies.set('language', language, {
     maxAge: 60 * 60 * 24 * 365,
     path: '/',
   });
 }
-console.log('language:', language);
 
 // LOCALE
 import { getLocale } from 'src/locales/getLocale';
