@@ -23,7 +23,7 @@ let language: AvailableLanguages = 'ES';
 if (cookieLanguage) {
   language = (cookieLanguage.split('-')[0] as AvailableLanguages) || 'ES';
 } else {
-  language = (acceptedLanguage.split('-')[0] as AvailableLanguages) || 'ES';
+  language = (acceptedLanguage?.split('-')[0] as AvailableLanguages) || 'ES';
   Astro.cookies.set('language', language, {
     maxAge: 60 * 60 * 24 * 365,
     path: '/',

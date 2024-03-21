@@ -2,15 +2,13 @@
 // IMPORT COMPONENTS
 import TmPost from 'src/components/TmPost.astro';
 
-// IMPORT TYPES
-// import type { Post, ChildrenData } from 'src/types/posts';
-
 // GET ASTRO PROPS
 const { locale, language } = Astro.props;
 
 // IMPORT ALL POSTS
+import type { PostsResponse } from 'src/types/posts';
 import { getIgPosts } from 'src/utils/igPostsUtils';
-const { posts } = await getIgPosts(locale, 4);
+const { posts }: { posts: PostsResponse[] } = await getIgPosts(locale, 4);
 
 // IMPORT DICTIONARY
 import { getDictionary } from '../locales/getDictionary';
@@ -25,7 +23,7 @@ const dictionary = getDictionary(language);
           <TmPost
             timestamp={post.dateToShow}
             permalink={post.permalink}
-            media={post.children_elements ? post.children_elements : post.media_url}
+            media={post.children.length > 0 ? post.children : post.media_url}
             caption={post.caption}
             type={post.media_type}
             id={post.id}
@@ -40,7 +38,7 @@ const dictionary = getDictionary(language);
             <TmPost
               timestamp={post.dateToShow}
               permalink={post.permalink}
-              media={post.children ? post.children_elements : post.media_url}
+              media={post.children ? post.children : post.media_url}
               caption={post.caption}
               type={post.media_type}
               id={post.id}
@@ -133,7 +131,7 @@ const dictionary = getDictionary(language);
         const video = createVideoElement(post);
         article.appendChild(video);
       } else if (post.media_type === 'CAROUSEL_ALBUM') {
-        post.children_elements.map((child) => {
+        post.children.map((child) => {
           if (child.media_type === 'IMAGE') {
             const img = createImgElement(child);
             article.appendChild(img);
@@ -200,7 +198,7 @@ const dictionary = getDictionary(language);
       const jsonPath = 'posts.json';
       const response = await fetch(
         `${jsonPath}?${new URLSearchParams({
-          locale: document.getElementsByName('og:locale')[0].content,
+          language: document.querySelector('html').lang,
         })}`
       ).then((response) => response.json());
       localStorage.setItem('posts', JSON.stringify(response.posts));
@@ -221,32 +219,6 @@ const dictionary = getDictionary(language);
       posts[i].remove();
     }
   };
-
-  // document.addEventListener('DOMContentLoaded', () => {
-  //   const localStorageIgPosts = localStorage.getItem('igPosts');
-  //   let jsonPosts;
-  //   if (localStorageIgPosts && localStorageIgPosts.lastDate > Date.now() - 12 * 3600 * 1000) {
-  //     jsonPosts = JSON.parse(localStorageIgPosts);
-  //     console.log(jsonPosts);
-  //   } else {
-  //     fetch('getIgPosts')
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         jsonPosts = data.result;
-  //         const images = document.getElementsByTagName('img');
-  //         for (let i = 0; i < images.length; i++) {
-  //           if (images[i].src.indexOf('placeholder') > -1) {
-  //             jsonPosts.map((post) => {
-  //               if (post.id === images[i].alt) {
-  //                 images[i].src = post.media_url;
-  //               }
-  //             });
-  //           }
-  //         }
-  //       })
-  //       .catch((error) => console.error('Error:', error));
-  //   }
-  // });
 </script>
 
 <style>

@@ -1,5 +1,5 @@
 import { turso } from 'src/utils/turso';
-import type { Children, ChildrenData, Post } from 'src/types/posts';
+import type { Children, ChildrenData, Post, PostsDbResponse, PostsResponse } from 'src/types/posts';
 import type { AvailableLocales } from 'src/types/language';
 
 export const getAllIgPosts = async (newUrl: string) => {
@@ -72,53 +72,59 @@ export const getIgPosts = async (
 };
 
 const fetchDbPosts = async (locale: AvailableLocales | undefined, limit: number | undefined) => {
-  let postsResult;
-  if (limit) {
-    postsResult = await turso.execute(
-      `SELECT * FROM posts ORDER BY date_timestamp DESC LIMIT ${limit}`,
-    );
-  } else {
-    postsResult = await turso.execute('SELECT * FROM posts ORDER BY date_timestamp DESC');
-  }
-  const posts = postsResult.rows;
-  const children = await fetchDbChildren();
-  const postsWithChildren: Post[] = [];
-  locale &&
-    posts.map((post) => {
-      const newPost: Post = {} as Post;
-      newPost.id = post.id as string;
-      newPost.caption = post.caption as string;
-      newPost.date_timestamp = post.date_timestamp as string;
-      newPost.permalink = post.permalink as string;
-      newPost.media_type = post.media_type as string;
-      newPost.media_url = post.media_url as string;
-      newPost.title = post.title as string;
-      newPost.children = post.children !== null ? parseInt(post.children as string) : 0;
-      newPost.dateToShow = new Date(parseInt(post.date_timestamp as string)).toLocaleDateString(
-        locale.replace('_', '-'),
-        {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-        },
-      );
-      if (post.children) {
-        newPost.children_elements = [];
-        children.map((child) => {
-          if (child.parentId === post.id) {
-            newPost.children_elements.push(child as unknown as ChildrenData);
-          }
-        });
-      }
-      postsWithChildren.push(newPost);
-    });
-  return postsWithChildren;
-};
+  const postsResult = await turso.execute(
+    // eslint-disable-next-line max-len
+    `SELECT post.id, post.caption, post.date_timestamp, post.permalink, post.media_type, post.media_url, post.title, children.id AS children_id, children.media_type AS children_media_type, children.media_url AS children_media_url FROM (SELECT * FROM posts${limit ? ' ORDER BY date_timestamp DESC LIMIT ' + limit : ''}) as post LEFT JOIN children ON post.id = children.parentId${limit ? '' : ' ORDER BY post.date_timestamp DESC'}`,
+  );
+  const posts = postsResult.rows as unknown as PostsDbResponse[];
+  const result: PostsResponse[] = [];
 
-const fetchDbChildren = async () => {
-  const childrenResult = await turso.execute('SELECT * FROM children');
-  const children = childrenResult.rows;
-  return children;
+  posts.forEach((post) => {
+    const existingPost = result.find((obj) => post.id === obj.id);
+    if (existingPost) {
+      existingPost.children.push({
+        id: post.children_id,
+        media_type: post.children_media_type,
+        media_url: post.children_media_url,
+      });
+    } else {
+      const dateToShowOptions: Intl.DateTimeFormatOptions = {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      };
+      let childrenResult: PostsResponse['children'];
+      if (post.children_id) {
+        childrenResult = [
+          {
+            id: post.children_id,
+            media_type: post.children_media_type,
+            media_url: post.children_media_url,
+          },
+        ];
+      } else childrenResult = [];
+      result.push({
+        id: post.id,
+        caption: post.caption,
+        date_timestamp: post.date_timestamp,
+        dateToShow: locale
+          ? new Date(parseInt(post.date_timestamp as string)).toLocaleDateString(
+              locale.replace('_', '-'),
+              dateToShowOptions,
+            )
+          : new Date(parseInt(post.date_timestamp as string)).toLocaleDateString(
+              'es-ES',
+              dateToShowOptions,
+            ),
+        permalink: post.permalink,
+        media_type: post.media_type,
+        media_url: post.media_url,
+        children: childrenResult,
+        title: post.title,
+      });
+    }
+  });
+  return result;
 };
 
 const fetchDbLastUpdated = async () => {

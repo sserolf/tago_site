@@ -13,7 +13,7 @@ interface Props {
 }
 const { data, pastGigsTitle, upcomingGigsTitle, language, locale } = Astro.props;
 
-const gigsRequest = await getGigs(locale);
+const gigsRequest = await getGigs(locale, 0);
 const gigs = gigsRequest as { upcomingGigs: Gig[]; pastGigs: Gig[] };
 const { upcomingGigs, pastGigs }: { upcomingGigs: Gig[]; pastGigs: Gig[] } = gigs;
 ---

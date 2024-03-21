@@ -136,7 +136,7 @@ const dictionary = getDictionary(language);
       const jsonPath = 'gigs.json';
       const response = await fetch(
         `${jsonPath}?${new URLSearchParams({
-          locale: document.getElementsByName('og:locale')[0].content,
+          language: document.querySelector('html').lang,
         })}`
       ).then((response) => response.json());
       localStorage.setItem('gigs', JSON.stringify(response));
