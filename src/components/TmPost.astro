@@ -58,14 +58,25 @@ if (type === 'CAROUSEL_ALBUM') {
     border-radius: 5px;
     width: 100%;
     height: auto;
+    scale: 0.99;
+    transition: scale 0.2s;
+  }
+
+  img:hover {
+    scale: 1;
   }
 
   .igPost {
     color: purple;
+    transition: color 0.2s;
     font-size: 1.25em;
     font-weight: bold;
     text-decoration: underline;
     cursor: pointer;
+  }
+
+  .igPost:hover {
+    color: blue;
   }
 
   p {

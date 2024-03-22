@@ -162,6 +162,7 @@ const dictionary = getDictionary(language);
 <style>
   a {
     color: darkblue;
+    transition: color 0.2s;
   }
 
   a:hover {
@@ -188,5 +189,11 @@ const dictionary = getDictionary(language);
     padding: 10px;
     width: 100%;
     cursor: pointer;
+    scale: 1;
+    transition: scale 0.2s;
+  }
+
+  button:hover {
+    scale: 1.01;
   }
 </style>

@@ -69,6 +69,9 @@ const dictionary = getDictionary(language);
     span.innerText = `${post.dateToShow} - IG POST`;
     span.onclick = () => open(post.permalink);
     span.style.color = 'purple';
+    span.style.transition = 'color 0.2s';
+    span.onmouseover = () => (span.style.color = 'blue');
+    span.onmouseout = () => (span.style.color = 'purple');
     span.style.fontSize = '1.25em';
     span.style.fontWeight = 'bold';
     span.style.textDecoration = 'underline';
@@ -83,6 +86,9 @@ const dictionary = getDictionary(language);
     const separator = title !== '' ? ' - ' : '';
     span.innerText = `${timestamp}${separator}${title}`;
     span.style.color = 'black';
+    span.style.transition = 'color 0.2s';
+    span.onmouseover = () => (span.style.color = 'blue');
+    span.onmouseout = () => (span.style.color = 'black');
     span.style.fontWeight = 'bold';
     return span;
   };
@@ -98,7 +104,10 @@ const dictionary = getDictionary(language);
     img.src = post.media_url;
     img.alt = post.id ? post.id : post.title ? post.title : 'alt';
     img.style.width = '100%';
-    img.style.aspectRatio = post.aspect_ratio;
+    img.style.scale = '0.9';
+    img.style.transition = 'scale 0.2s';
+    img.onmouseover = () => (img.style.scale = '1');
+    img.onmouseout = () => (img.style.scale = '0.9');
     return img;
   };
 
@@ -222,9 +231,6 @@ const dictionary = getDictionary(language);
 </script>
 
 <style>
-  img {
-    border-radius: 6px;
-  }
   button {
     border-color: black;
     border-radius: 6px;
@@ -234,6 +240,12 @@ const dictionary = getDictionary(language);
     padding: 10px;
     width: 100%;
     cursor: pointer;
+    scale: 1;
+    transition: scale 0.2s;
+  }
+
+  button:hover {
+    scale: 1.01;
   }
 
   .post {
