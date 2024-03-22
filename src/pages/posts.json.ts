@@ -14,8 +14,8 @@ export async function GET(request: Request) {
   }
   const limitString = url.searchParams.get('limit') ? url.searchParams.get('limit') : undefined;
   const limit = limitString ? parseInt(limitString) : undefined;
-  const posts = await getIgPosts(locale, limit);
-  return new Response(JSON.stringify(posts, null, 2), {
+  const res = await getIgPosts(locale, limit);
+  return new Response(JSON.stringify(res, null, 2), {
     status: 200,
     headers: {
       'Content-Type': 'application/json',

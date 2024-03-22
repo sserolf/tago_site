@@ -49,20 +49,7 @@ export const getIgPosts = async (
     const posts = await fetchDbPosts(locale, limit);
     return { posts: posts, lastUpdated: lastUpdated };
   } else {
-    const igPosts = await getAllIgPosts('');
-    igPosts.map(async (post) => {
-      const timestamp = new Date(post.timestamp).getTime().toString();
-      const hasChildren =
-        post.children && (post.children as Children).data.length > 0
-          ? (post.children as Children).data.length.toString()
-          : null;
-      insertDbPost(post, timestamp, hasChildren);
-      if (post.children)
-        (post.children as Children).data.map(async (child) => {
-          insertDbChild(child, post.id);
-        });
-    });
-    updateLastUpdated();
+    updateDbPosts();
     const posts = await fetchDbPosts(locale, limit);
     return {
       posts: posts,
@@ -147,17 +134,25 @@ const insertDbPost = async (post: Post, timestamp: string, hasChildren: string |
       post.title ? post.title : null,
     ],
   });
+  await turso.execute({
+    sql: 'UPDATE posts SET media_url = ? WHERE id = ?',
+    args: [post.media_url ? post.media_url : null, post.id!],
+  });
 };
 
 const insertDbChild = async (child: ChildrenData, parentId: Post['id']) => {
   await turso.execute({
-    sql: 'INSERT OR IGNORE INTO posts (id, parentId, media_type, media_url) VALUES (?, ?, ?, ?)',
+    sql: 'INSERT OR IGNORE INTO children (id, parentId, media_type, media_url) VALUES (?, ?, ?, ?)',
     args: [
       child.id!,
       parentId!,
       child.media_type ? child.media_type : null,
       child.media_url ? child.media_url : null,
     ],
+  });
+  await turso.execute({
+    sql: 'UPDATE children SET media_url = ? WHERE id = ?',
+    args: [child.media_url ? child.media_url : null, child.id!],
   });
 };
 
@@ -166,4 +161,22 @@ const updateLastUpdated = async () => {
     sql: 'UPDATE last_updated SET date = ?',
     args: [Date.now().toString()],
   });
+};
+
+export const updateDbPosts = async () => {
+  const igPosts = await getAllIgPosts('');
+  igPosts.map(async (post) => {
+    const timestamp = new Date(post.timestamp).getTime().toString();
+    const hasChildren =
+      post.children && (post.children as Children).data.length > 0
+        ? (post.children as Children).data.length.toString()
+        : null;
+    insertDbPost(post, timestamp, hasChildren);
+    if (post.children)
+      (post.children as Children).data.map(async (child) => {
+        insertDbChild(child, post.id);
+      });
+  });
+  updateLastUpdated();
+  return 'Database updated';
 };
