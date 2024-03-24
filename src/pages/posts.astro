@@ -1,12 +1,13 @@
 ---
 import Config from 'src/layouts/Config.astro';
+import { TmDbItem } from 'src/components/Lit/TmDbItem';
 import { checkUser } from 'src/utils/checkUser';
 import { getIgPosts } from 'src/utils/igPostsUtils';
 
 const sessionCookie = Astro.cookies.get('session');
 let verified;
 if (sessionCookie) verified = await checkUser(sessionCookie);
-if (!verified) return Astro.redirect('login?error=1');
+if (!verified) return Astro.redirect('login');
 const username = (verified && verified.username) || null;
 
 const { posts } = await getIgPosts('es_ES', 0);
@@ -32,52 +33,52 @@ const { posts } = await getIgPosts('es_ES', 0);
         return (
           <tr>
             <td>
-              <div>{count + 1}</div>
+              <span>{count + 1}</span>
             </td>
             <td>
-              <div title={post.id} onclick="alert(this.innerText)">
-                <pre>{post.id}</pre>
-              </div>
+              <TmDbItem client:visible>
+                <pre title={post.id}>{post.id}</pre>
+              </TmDbItem>
             </td>
             <td>
-              <div title={post.caption} onclick="alert(this.innerText)">
-                <pre>{post.caption}</pre>
-              </div>
+              <TmDbItem client:visible>
+                <pre title={post.caption}>{post.caption}</pre>
+              </TmDbItem>
             </td>
             <td>
-              <div title={post.date_timestamp} onclick="alert(this.innerText)">
-                <pre>{post.date_timestamp}</pre>
-              </div>
+              <TmDbItem client:visible>
+                <pre title={post.date_timestamp}>{post.date_timestamp}</pre>
+              </TmDbItem>
             </td>
             <td>
-              <div title={post.dateToShow} onclick="alert(this.innerText)">
-                <pre>{post.dateToShow}</pre>
-              </div>
+              <TmDbItem client:visible>
+                <pre title={post.dateToShow}>{post.dateToShow}</pre>
+              </TmDbItem>
             </td>
             <td>
-              <div title={post.permalink} onclick="alert(this.innerText)">
-                <pre>{post.permalink}</pre>
-              </div>
+              <TmDbItem client:visible>
+                <pre title={post.permalink}>{post.permalink}</pre>
+              </TmDbItem>
             </td>
             <td>
-              <div title={post.media_type} onclick="alert(this.innerText)">
-                <pre>{post.media_type}</pre>
-              </div>
+              <TmDbItem client:visible>
+                <pre title={post.media_type}>{post.media_type}</pre>
+              </TmDbItem>
             </td>
             <td>
-              <div title={post.media_url} onclick="alert(this.innerText)">
-                <pre>{post.media_url}</pre>
-              </div>
+              <TmDbItem client:visible>
+                <pre title={post.media_url}>{post.media_url}</pre>
+              </TmDbItem>
             </td>
             <td>
-              <div title={post.children.toString()} onclick="alert(this.innerText)">
-                <pre>{post.children}</pre>
-              </div>
+              <TmDbItem>
+                <pre title={post.children.toString()}>{post.children}</pre>
+              </TmDbItem>
             </td>
             <td>
-              <div title={post.title} onclick="alert(this.innerText)">
-                <pre>{post.title}</pre>
-              </div>
+              <TmDbItem client:visible>
+                <pre title={post.title}>{post.title}</pre>
+              </TmDbItem>
             </td>
           </tr>
         );
@@ -88,16 +89,14 @@ const { posts } = await getIgPosts('es_ES', 0);
 
 <style>
   table {
-    width: 100%;
-    height: 300px;
+    width: fit-content;
+    max-width: 100%;
+    height: fit-content;
+    max-height: 300px;
     scrollbar-width: thin;
     border-collapse: collapse;
     overflow: scroll;
     display: block;
-  }
-
-  th {
-    background-color: #f2f2f2;
   }
 
   th,
@@ -115,20 +114,11 @@ const { posts } = await getIgPosts('es_ES', 0);
     background-color: #e5e0e0;
   }
 
-  th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    background-color: #f2f2f2;
-    color: black;
-  }
-
-  div,
   pre {
     text-overflow: ellipsis;
-    white-space: nowrap;
     width: fit-content;
-    max-width: 240px;
+    max-width: 170px;
     overflow: hidden;
+    white-space: nowrap;
   }
 </style>

@@ -1,12 +1,13 @@
 ---
 import Config from 'src/layouts/Config.astro';
+import { TmDbItem } from 'src/components/Lit/TmDbItem';
 import { checkUser } from 'src/utils/checkUser';
 import { getGigs } from 'src/utils/gigsUtils';
 
 const sessionCookie = Astro.cookies.get('session');
 let verified;
 if (sessionCookie) verified = await checkUser(sessionCookie);
-if (!verified) return Astro.redirect('login?error=1');
+if (!verified) return Astro.redirect('login');
 const username = (verified && verified.username) || null;
 
 const { upcomingGigs, pastGigs } = await getGigs('es_ES', 0);
@@ -28,27 +29,27 @@ const { upcomingGigs, pastGigs } = await getGigs('es_ES', 0);
         return (
           <tr>
             <td>
-              <div>{count + 1}</div>
+              <span>{count + 1}</span>
             </td>
             <td>
-              <div title={gig.name} onclick="alert(this.innerText)">
-                <pre>{gig.name}</pre>
-              </div>
+              <TmDbItem client:visible>
+                <pre title={gig.name}>{gig.name}</pre>
+              </TmDbItem>
             </td>
             <td>
-              <div title={gig.dateToShow} onclick="alert(this.innerText)">
-                <pre>{gig.dateToShow}</pre>
-              </div>
+              <TmDbItem client:visible>
+                <pre title={gig.dateToShow}>{gig.dateToShow}</pre>
+              </TmDbItem>
             </td>
             <td>
-              <div title={gig.date} onclick="alert(this.innerText)">
-                <pre>{gig.date}</pre>
-              </div>
+              <TmDbItem client:visible>
+                <pre title={gig.date}>{gig.date}</pre>
+              </TmDbItem>
             </td>
             <td>
-              <div title={gig.url} onclick="alert(this.innerText)">
-                <pre>{gig.url}</pre>
-              </div>
+              <TmDbItem client:visible>
+                <pre title={gig.url}>{gig.url}</pre>
+              </TmDbItem>
             </td>
           </tr>
         );
@@ -69,27 +70,27 @@ const { upcomingGigs, pastGigs } = await getGigs('es_ES', 0);
         return (
           <tr>
             <td>
-              <div>{count + 1}</div>
+              <span>{count + 1}</span>
             </td>
             <td>
-              <div title={gig.name} onclick="alert(this.innerText)">
-                <pre>{gig.name}</pre>
-              </div>
+              <TmDbItem client:visible>
+                <pre title={gig.name}>{gig.name}</pre>
+              </TmDbItem>
             </td>
             <td>
-              <div title={gig.dateToShow} onclick="alert(this.innerText)">
-                <pre>{gig.dateToShow}</pre>
-              </div>
+              <TmDbItem client:visible>
+                <pre title={gig.dateToShow}>{gig.dateToShow}</pre>
+              </TmDbItem>
             </td>
             <td>
-              <div title={gig.date} onclick="alert(this.innerText)">
-                <pre>{gig.date}</pre>
-              </div>
+              <TmDbItem client:visible>
+                <pre title={gig.date}>{gig.date}</pre>
+              </TmDbItem>
             </td>
             <td>
-              <div title={gig.url} onclick="alert(this.innerText)">
-                <pre>{gig.url}</pre>
-              </div>
+              <TmDbItem client:visible>
+                <pre title={gig.url}>{gig.url}</pre>
+              </TmDbItem>
             </td>
           </tr>
         );
@@ -100,17 +101,14 @@ const { upcomingGigs, pastGigs } = await getGigs('es_ES', 0);
 
 <style>
   table {
-    width: 100%;
+    width: fit-content;
+    max-width: 100%;
     height: fit-content;
     max-height: 300px;
     scrollbar-width: thin;
     border-collapse: collapse;
     overflow: scroll;
     display: block;
-  }
-
-  th {
-    background-color: #f2f2f2;
   }
 
   th,
@@ -128,20 +126,11 @@ const { upcomingGigs, pastGigs } = await getGigs('es_ES', 0);
     background-color: #e5e0e0;
   }
 
-  th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    background-color: #f2f2f2;
-    color: black;
-  }
-
-  div,
   pre {
     text-overflow: ellipsis;
-    white-space: nowrap;
     width: fit-content;
     max-width: 170px;
     overflow: hidden;
+    white-space: nowrap;
   }
 </style>
