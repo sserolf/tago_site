@@ -11,7 +11,7 @@ import { getIgPosts } from 'src/utils/igPostsUtils';
 const { posts }: { posts: PostsResponse[] } = await getIgPosts(locale, 4);
 
 // IMPORT DICTIONARY
-import { getDictionary } from '../locales/getDictionary';
+import { getDictionary } from 'src/locales/getDictionary';
 const dictionary = getDictionary(language);
 ---
 

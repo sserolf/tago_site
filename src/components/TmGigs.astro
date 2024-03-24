@@ -1,9 +1,9 @@
 ---
 import type { AvailableLanguages, AvailableLocales } from 'src/types/language';
-import TmPastGigs from './TmPastGigs.astro';
-import TmUpcomingGigs from './TmUpcomingGigs.astro';
-import { type Gig } from './../types/gigs';
-import { getGigs } from '../utils/gigsUtils';
+import TmPastGigs from 'src/components/TmPastGigs.astro';
+import TmUpcomingGigs from 'src/components/TmUpcomingGigs.astro';
+import { type Gig } from 'src/types/gigs';
+import { getGigs } from 'src/utils/gigsUtils';
 interface Props {
   data: string;
   pastGigsTitle: string;

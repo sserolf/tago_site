@@ -8,23 +8,23 @@ interface Props {
 const { language, locale } = Astro.props;
 
 // ASTRO COMPONENTS
-import TmHeaderIcons from '../components/TmHeaderIcons.astro';
-import TmContent from '../components/TmContent.astro';
-import TmSection from '../components/TmSection.astro';
-import TmGigs from '../components/TmGigs.astro';
-import TmMedia from '../components/TmMedia.astro';
-import TmNews from '../components/TmNews.astro';
-import TmHistory from '../components/TmHistory.astro';
-import TmContact from '../components/TmContact.astro';
-import TmFooter from '../components/TmFooter.astro';
-import TmFooterIcons from '../components/TmFooterIcons.astro';
-import TmCopy from '../components/TmCopy.astro';
+import TmHeaderIcons from 'src/components/TmHeaderIcons.astro';
+import TmContent from 'src/components/TmContent.astro';
+import TmSection from 'src/components/TmSection.astro';
+import TmGigs from 'src/components/TmGigs.astro';
+import TmMedia from 'src/components/TmMedia.astro';
+import TmNews from 'src/components/TmNews.astro';
+import TmHistory from 'src/components/TmHistory.astro';
+import TmContact from 'src/components/TmContact.astro';
+import TmFooter from 'src/components/TmFooter.astro';
+import TmFooterIcons from 'src/components/TmFooterIcons.astro';
+import TmCopy from 'src/components/TmCopy.astro';
 
 // CONSTANTS
-import { CONTACT, FOOTER_ICONS, HEADER_ICONS } from '../locales/commonData';
+import { CONTACT, FOOTER_ICONS, HEADER_ICONS } from 'src/locales/commonData';
 
 // DICTIONARY
-import { getDictionary } from '../locales/getDictionary';
+import { getDictionary } from 'src/locales/getDictionary';
 const dictionary = getDictionary(language);
 ---
 
