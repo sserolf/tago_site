@@ -23,7 +23,14 @@ if (type === 'CAROUSEL_ALBUM') {
 {title && <span class="igPost">{`${timestamp} - ${title}`}</span>}
 {!permalink && !title && <span class="igPost">{timestamp}</span>}
 {caption && <p>{caption}</p>}
-{image && <img loading="lazy" src={image} alt={title ? title : id ? id : 'alt'} />}
+{
+  image && permalink && (
+    <a href={permalink} target="_blank">
+      <img loading="lazy" src={image} alt={title ? title : id ? id : 'alt'} />
+    </a>
+  )
+}
+{image && !permalink && <img loading="lazy" src={image} alt={title ? title : id ? id : 'alt'} />}
 {video && <video src={video} controls />}
 {
   carousel &&
@@ -31,13 +38,25 @@ if (type === 'CAROUSEL_ALBUM') {
       if (carouselItem.media_type === 'VIDEO') {
         return <video src={carouselItem.media_url} controls />;
       } else {
-        return (
-          <img
-            loading="lazy"
-            src={carouselItem.media_url}
-            alt={carouselItem.id ? carouselItem.id : 'alt'}
-          />
-        );
+        if (permalink) {
+          return (
+            <a href={permalink} target="_blank">
+              <img
+                loading="lazy"
+                src={carouselItem.media_url}
+                alt={carouselItem.id ? carouselItem.id : 'alt'}
+              />
+            </a>
+          );
+        } else {
+          return (
+            <img
+              loading="lazy"
+              src={carouselItem.media_url}
+              alt={carouselItem.id ? carouselItem.id : 'alt'}
+            />
+          );
+        }
       }
     })
 }
@@ -46,9 +65,10 @@ if (type === 'CAROUSEL_ALBUM') {
   img {
     border-radius: 5px;
     width: 100%;
-    height: auto;
     scale: 0.99;
     transition: scale 0.2s;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
   }
 
   img:hover {

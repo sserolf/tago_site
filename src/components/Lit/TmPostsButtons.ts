@@ -68,7 +68,15 @@ export class TmPostsButtons extends LitElement {
               ? html`<span class="igPost">${post.dateToShow}</span>`
               : nothing}
             ${post.caption ? html`<p>${post.caption}</p>` : nothing}
-            ${image
+            ${image && post.permalink
+              ? html`<a href=${post.permalink} target="_blank"
+                  ><img
+                    loading="lazy"
+                    src="${image}"
+                    alt=${post.title ? post.title : post.id ? post.id : 'alt'}
+                /></a>`
+              : nothing}
+            ${image && !post.permalink
               ? html`<img
                   loading="lazy"
                   src="${image}"
@@ -81,11 +89,20 @@ export class TmPostsButtons extends LitElement {
                   if (carouselItem.media_type === 'VIDEO') {
                     return html`<video src=${carouselItem.media_url} controls></video>`;
                   } else {
-                    return html`<img
-                      loading="lazy"
-                      src=${carouselItem.media_url}
-                      alt=${carouselItem.id ? carouselItem.id : 'alt'}
-                    />`;
+                    if (post.permalink) {
+                      return html`<a href=${post.permalink} target="_blank"
+                        ><img
+                          loading="lazy"
+                          src=${carouselItem.media_url}
+                          alt=${carouselItem.id ? carouselItem.id : 'alt'}
+                      /></a>`;
+                    } else {
+                      return html`<img
+                        loading="lazy"
+                        src=${carouselItem.media_url}
+                        alt=${carouselItem.id ? carouselItem.id : 'alt'}
+                      />`;
+                    }
                   }
                 })
               : nothing}
@@ -128,6 +145,8 @@ export class TmPostsButtons extends LitElement {
       height: auto;
       scale: 0.99;
       transition: scale 0.2s;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
     }
 
     img:hover {
