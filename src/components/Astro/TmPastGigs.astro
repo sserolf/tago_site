@@ -2,6 +2,7 @@
 import { getDictionary } from 'src/locales/getDictionary';
 import type { Gig } from 'src/types/gigs';
 import type { AvailableLanguages } from 'src/types/language';
+import { TmGigsButtons } from 'src/components/Lit/TmGigsButtons';
 
 interface Props {
   data: Gig[];
@@ -10,16 +11,12 @@ interface Props {
 
 const { data, language } = Astro.props;
 
-const pastGigsLimit = 4;
-
-const slicedData = data.slice(0, pastGigsLimit);
 const dictionary = getDictionary(language);
+const totalGigs = data.length - 1;
 ---
 
 {
-  slicedData.map((gig, count) => {
-    const isLastGig = count === pastGigsLimit - 1;
-
+  data.map((gig, count) => {
     return (
       <>
         <li class="pastGig">
@@ -32,132 +29,18 @@ const dictionary = getDictionary(language);
           )}
           <span>{gig.dateToShow}</span>
         </li>
-        {isLastGig && (
+        {count === totalGigs && (
           <li>
-            <div id="gigsNavigationButtons">
-              <button id="moreGigs">{dictionary.Common.moreGigs}</button>
-              <button id="closeGigs" style="display: none;">
-                {dictionary.Common.closeContent}
-              </button>
-            </div>
+            <TmGigsButtons client:visible>
+              <span slot="moreGigs">{dictionary.Common.moreGigs}</span>
+              <span slot="closeGigs">{dictionary.Common.closeContent}</span>
+            </TmGigsButtons>
           </li>
         )}
       </>
     );
   })
 }
-
-<script is:inline defer>
-  const createLiElement = () => {
-    const li = document.createElement('li');
-    li.className = 'pastGig';
-    li.style.display = 'flex';
-    li.style.justifyContent = 'space-between';
-    li.style.minHeight = '48px';
-    li.style.alignItems = 'center';
-    return li;
-  };
-
-  const createAElement = (gig) => {
-    const a = document.createElement('a');
-    a.innerText = gig.name;
-    a.href = gig.url;
-    a.style.color = 'darkblue';
-    a.onmouseover = () => {
-      a.style.color = '#06f';
-    };
-    a.onmouseout = () => {
-      a.style.color = 'darkblue';
-    };
-    return a;
-  };
-
-  const createGigSpanElement = (text) => {
-    const span = document.createElement('span');
-    span.innerText = text;
-    return span;
-  };
-
-  const createGigElement = (gig) => {
-    const li = createLiElement();
-    if (gig.url) {
-      const a = createAElement(gig);
-      li.appendChild(a);
-    } else {
-      const titleSpan = createGigSpanElement(gig.name);
-      li.appendChild(titleSpan);
-    }
-    const dateSpan = createGigSpanElement(gig.dateToShow);
-    li.appendChild(dateSpan);
-    return li;
-  };
-
-  const addMoreGigs = (gigs, length) => {
-    gigs.map((gig) => {
-      const gigElement = createGigElement(gig);
-      document
-        .getElementById('pastGigs')
-        ?.insertBefore(gigElement, document.getElementById('gigsNavigationButtons').parentElement);
-      if (document.getElementsByClassName('pastGig').length > 4) {
-        showButton('closeGigs');
-      } else {
-        hideButton('closeGigs');
-      }
-      if (length === document.getElementsByClassName('pastGig').length) {
-        hideButton('moreGigs');
-      }
-    });
-  };
-
-  const moreGigsButton = document.getElementById('moreGigs');
-  if (moreGigsButton)
-    moreGigsButton.onclick = async () => {
-      const jsonGigs = await getJsonGigs();
-      addMoreGigs(jsonGigs.gigs, jsonGigs.length);
-    };
-
-  const closeGigs = () => {
-    removeGigs();
-    hideButton('closeGigs');
-    showButton('moreGigs');
-  };
-
-  const closeGigsButton = document.getElementById('closeGigs');
-  if (closeGigsButton)
-    closeGigsButton.onclick = () => {
-      closeGigs();
-    };
-
-  const getJsonGigs = async () => {
-    let pastGigs;
-    if (localStorage.getItem('gigs')) {
-      pastGigs = JSON.parse(localStorage.getItem('gigs')).gigs.pastGigs;
-    } else {
-      const jsonPath = 'gigs.json';
-      const response = await fetch(
-        `${jsonPath}?${new URLSearchParams({
-          language: document.querySelector('html').lang,
-        })}`
-      ).then((response) => response.json());
-      localStorage.setItem('gigs', JSON.stringify(response));
-      pastGigs = response.gigs.pastGigs;
-    }
-    const gigs = document.getElementsByClassName('pastGig');
-    const dataToAppend = pastGigs.slice(gigs.length, gigs.length + 4);
-    return { gigs: dataToAppend, length: pastGigs.length };
-  };
-
-  const removeGigs = () => {
-    const gigs = document.getElementsByClassName('pastGig');
-    for (let i = gigs.length - 1; i > 3; i--) {
-      gigs[i].remove();
-    }
-  };
-
-  window.onbeforeunload = () => {
-    localStorage.removeItem('gigs');
-  };
-</script>
 
 <style>
   a {
@@ -178,22 +61,5 @@ const dictionary = getDictionary(language);
 
   li:last-of-type {
     display: block;
-  }
-
-  button {
-    border-color: black;
-    border-radius: 6px;
-    color: black;
-    font-size: 15px;
-    margin: 10px 0;
-    padding: 10px;
-    width: 100%;
-    cursor: pointer;
-    scale: 1;
-    transition: scale 0.2s;
-  }
-
-  button:hover {
-    scale: 1.01;
   }
 </style>

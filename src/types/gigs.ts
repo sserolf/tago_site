@@ -4,3 +4,8 @@ export type Gig = {
   dateToShow?: string;
   url?: string;
 };
+
+export type GigsResponse = {
+  upcomingGigs: Gig[];
+  pastGigs: Gig[];
+};

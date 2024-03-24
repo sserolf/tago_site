@@ -9,8 +9,6 @@ if (type === 'CAROUSEL_ALBUM') {
 } else if (type === 'VIDEO') {
   video = media;
 } else {
-  // let imagePath = 'assets/images/placeholder.webp';
-  // image = imagePath;
   image = media;
 }
 ---
@@ -24,7 +22,7 @@ if (type === 'CAROUSEL_ALBUM') {
 }
 {title && <span class="igPost">{`${timestamp} - ${title}`}</span>}
 {!permalink && !title && <span class="igPost">{timestamp}</span>}
-<p>{caption}</p>
+{caption && <p>{caption}</p>}
 {image && <img loading="lazy" src={image} alt={title ? title : id ? id : 'alt'} />}
 {video && <video src={video} controls />}
 {
@@ -32,11 +30,7 @@ if (type === 'CAROUSEL_ALBUM') {
     carousel.map((carouselItem: ChildrenData) => {
       if (carouselItem.media_type === 'VIDEO') {
         return <video src={carouselItem.media_url} controls />;
-      } else if (carouselItem.media_type === 'IMAGE') {
-        // let imagePath = 'assets/images/placeholder.webp';
-        // return (
-        //   <img loading="lazy" src={imagePath} alt={carouselItem.id ? carouselItem.id : 'alt'} />
-        // );
+      } else {
         return (
           <img
             loading="lazy"
@@ -45,7 +39,6 @@ if (type === 'CAROUSEL_ALBUM') {
           />
         );
       }
-      return null;
     })
 }
 

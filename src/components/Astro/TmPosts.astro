@@ -1,6 +1,7 @@
 ---
 // IMPORT COMPONENTS
 import TmPost from 'src/components/Astro/TmPost.astro';
+import { TmPostsButtons } from 'src/components/Lit/TmPostsButtons';
 
 // GET ASTRO PROPS
 const { locale, language } = Astro.props;
@@ -13,12 +14,13 @@ const { posts }: { posts: PostsResponse[] } = await getIgPosts(locale, 4);
 // IMPORT DICTIONARY
 import { getDictionary } from 'src/locales/getDictionary';
 const dictionary = getDictionary(language);
+const totalPosts = posts.length - 1;
 ---
 
 {
   posts.map((post, count) => {
-    if (count < 3) {
-      return (
+    return (
+      <>
         <article class="post">
           <TmPost
             timestamp={post.dateToShow}
@@ -30,224 +32,18 @@ const dictionary = getDictionary(language);
             title={post.title}
           />
         </article>
-      );
-    } else if (count === 3) {
-      return (
-        <>
-          <article class="post">
-            <TmPost
-              timestamp={post.dateToShow}
-              permalink={post.permalink}
-              media={post.children ? post.children : post.media_url}
-              caption={post.caption}
-              type={post.media_type}
-              id={post.id}
-              title={post.title}
-            />
-          </article>
-          <div id="postNavigationButtons">
-            <button id="moreNews">{dictionary.Common.moreNews}</button>
-            <button id="closeNews" style="display: none;">
-              {dictionary.Common.closeContent}
-            </button>
-          </div>
-        </>
-      );
-    }
+        {count === totalPosts && (
+          <TmPostsButtons client:visible>
+            <span slot="moreNews">{dictionary.Common.moreNews}</span>
+            <span slot="closeNews">{dictionary.Common.closeContent}</span>
+          </TmPostsButtons>
+        )}
+      </>
+    );
   })
 }
-<script is:inline defer>
-  const createArticleElement = () => {
-    const article = document.createElement('article');
-    article.className = 'post';
-    article.style.margin = '10px 0';
-    return article;
-  };
-
-  const createTitleSpanElement = (post) => {
-    const span = document.createElement('span');
-    span.innerText = `${post.dateToShow} - IG POST`;
-    span.onclick = () => open(post.permalink);
-    span.style.color = 'purple';
-    span.style.transition = 'color 0.2s';
-    span.onmouseover = () => (span.style.color = 'blue');
-    span.onmouseout = () => (span.style.color = 'purple');
-    span.style.fontSize = '1.25em';
-    span.style.fontWeight = 'bold';
-    span.style.textDecoration = 'underline';
-    span.style.cursor = 'pointer';
-    return span;
-  };
-
-  const createSpanElement = (post) => {
-    const span = document.createElement('span');
-    const timestamp = post.dateToShow;
-    const title = post.title;
-    const separator = title !== '' ? ' - ' : '';
-    span.innerText = `${timestamp}${separator}${title}`;
-    span.style.color = 'black';
-    span.style.transition = 'color 0.2s';
-    span.onmouseover = () => (span.style.color = 'blue');
-    span.onmouseout = () => (span.style.color = 'black');
-    span.style.fontWeight = 'bold';
-    return span;
-  };
-
-  const createPElement = (post) => {
-    const p = document.createElement('p');
-    p.innerText = post.caption;
-    return p;
-  };
-
-  const createImgElement = (post) => {
-    const img = document.createElement('img');
-    img.src = post.media_url;
-    img.alt = post.id ? post.id : post.title ? post.title : 'alt';
-    img.style.width = '100%';
-    img.style.scale = '0.9';
-    img.style.transition = 'scale 0.2s';
-    img.onmouseover = () => (img.style.scale = '1');
-    img.onmouseout = () => (img.style.scale = '0.9');
-    return img;
-  };
-
-  const createVideoElement = (post) => {
-    const video = document.createElement('video');
-    video.src = post.media_url;
-    video.controls = true;
-    video.style.width = '100%';
-    return video;
-  };
-
-  const createPostElement = (post) => {
-    const article = createArticleElement();
-    if (!post.title) {
-      const titleSpan = createTitleSpanElement(post);
-      article.appendChild(titleSpan);
-    } else {
-      const span = createSpanElement(post);
-      article.appendChild(span);
-    }
-    if (post.caption) {
-      const p = createPElement(post);
-      article.appendChild(p);
-    }
-    if (post.media_url) {
-      if (post.media_type === 'IMAGE') {
-        const img = createImgElement(post);
-        article.appendChild(img);
-      } else if (post.media_type === 'VIDEO') {
-        const video = createVideoElement(post);
-        article.appendChild(video);
-      } else if (post.media_type === 'CAROUSEL_ALBUM') {
-        post.children.map((child) => {
-          if (child.media_type === 'IMAGE') {
-            const img = createImgElement(child);
-            article.appendChild(img);
-          } else if (child.media_type === 'VIDEO') {
-            const video = createVideoElement(child);
-            article.appendChild(video);
-          }
-        });
-      }
-    }
-    return article;
-  };
-
-  const addMoreNews = (posts, length) => {
-    posts.map((post) => {
-      const postElement = createPostElement(post);
-      document
-        .getElementById('news')
-        ?.insertBefore(postElement, document.getElementById('postNavigationButtons'));
-      if (document.getElementsByClassName('post').length > 4) {
-        showButton('closeNews');
-      } else {
-        hideButton('closeNews');
-      }
-      if (length === document.getElementsByClassName('post').length) {
-        hideButton('moreNews');
-      }
-    });
-  };
-
-  const moreNewsButton = document.getElementById('moreNews');
-  if (moreNewsButton)
-    moreNewsButton.onclick = async () => {
-      const jsonPosts = await getPosts();
-      addMoreNews(jsonPosts.posts, jsonPosts.length);
-    };
-
-  const closeNews = () => {
-    removePosts();
-    hideButton('closeNews');
-    showButton('moreNews');
-  };
-  const closeNewsButton = document.getElementById('closeNews');
-  if (closeNewsButton)
-    closeNewsButton.onclick = () => {
-      closeNews();
-    };
-
-  const hideButton = (buttonId) => {
-    const button = document.getElementById(buttonId);
-    if (button) button.style.display = 'none';
-  };
-
-  const showButton = (buttonId) => {
-    const button = document.getElementById(buttonId);
-    if (button) button.style.display = 'block';
-  };
-
-  const getPosts = async () => {
-    let posts;
-    if (localStorage.getItem('posts')) {
-      posts = JSON.parse(localStorage.getItem('posts'));
-    } else {
-      const jsonPath = 'posts.json';
-      const response = await fetch(
-        `${jsonPath}?${new URLSearchParams({
-          language: document.querySelector('html').lang,
-        })}`
-      ).then((response) => response.json());
-      localStorage.setItem('posts', JSON.stringify(response.posts));
-      posts = response.posts;
-    }
-    const postsShowing = document.getElementsByClassName('post');
-    const dataToAppend = posts.slice(postsShowing.length, postsShowing.length + 4);
-    return { posts: dataToAppend, length: pastGigs.length };
-  };
-
-  window.onbeforeunload = () => {
-    localStorage.removeItem('igPosts');
-  };
-
-  const removePosts = () => {
-    const posts = document.getElementsByClassName('post');
-    for (let i = posts.length - 1; i > 3; i--) {
-      posts[i].remove();
-    }
-  };
-</script>
 
 <style>
-  button {
-    border-color: black;
-    border-radius: 6px;
-    color: black;
-    font-size: 15px;
-    margin: 10px 0;
-    padding: 10px;
-    width: 100%;
-    cursor: pointer;
-    scale: 1;
-    transition: scale 0.2s;
-  }
-
-  button:hover {
-    scale: 1.01;
-  }
-
   .post {
     margin: 10px 0;
   }
