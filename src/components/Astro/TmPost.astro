@@ -17,13 +17,9 @@ if (type === 'CAROUSEL_ALBUM') {
 
 {
   permalink && (
-    <span
-      class="igPost"
-      onclick="window.open(this.attributes['data-href'].value)"
-      data-href={permalink}
-    >
+    <a href={permalink} class="igPost">
       {timestamp} IG POST
-    </span>
+    </a>
   )
 }
 {title && <span class="igPost">{`${timestamp} - ${title}`}</span>}

@@ -12,14 +12,7 @@ const notLazy = ['band', 'fatmusik', 'menu', 'socialItem'].includes(classes ? cl
 
 {
   classes === 'band' && (
-    <img
-      loading={notLazy ? 'eager' : 'lazy'}
-      class={classes}
-      src={src}
-      alt={alt}
-      width={width}
-      onclick="document.querySelector('main').scrollTo(0, 0), location.hash = ''"
-    />
+    <img loading={notLazy ? 'eager' : 'lazy'} class={classes} src={src} alt={alt} width={width} />
   )
 }
 {

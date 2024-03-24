@@ -1,6 +1,7 @@
 ---
 import type { AvailableLanguages } from 'src/types/language';
 import TmNav from 'src/components/Astro/TmNav.astro';
+import { TmMainContent } from 'src/components/Lit/TmMainContent';
 
 interface Props {
   gigs: string;
@@ -25,12 +26,11 @@ const { gigs, media, news, history, contact, language } = Astro.props;
     language={language}
   />
 </nav>
-<main
-  onclick="document.querySelector('input').checked ? document.querySelector('input').click() : null"
->
-  <slot />
+<main>
+  <TmMainContent client:visible>
+    <slot />
+  </TmMainContent>
 </main>
-
 <style>
   main {
     scrollbar-width: none;

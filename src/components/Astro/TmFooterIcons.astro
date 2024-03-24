@@ -1,5 +1,4 @@
 ---
-import TmLink from 'src/components/Astro/TmLink.astro';
 import TmImage from 'src/components/Astro/TmImage.astro';
 
 interface Props {
@@ -16,9 +15,9 @@ const { data } = Astro.props;
 <div>
   {
     data.map((item) => (
-      <TmLink href={item.url}>
+      <a href={item.url} target="_blank">
         <TmImage classes="socialItem" src={item.img} alt={item.title} />
-      </TmLink>
+      </a>
     ))
   }
 </div>

@@ -1,6 +1,7 @@
 ---
 import { type AvailableLanguages } from 'src/types/language';
-import TmLink from 'src/components/Astro/TmLink.astro';
+import { TmLanguageSelector } from 'src/components/Lit/TmLanguageSelector';
+import { TmLink } from 'src/components/Lit/TmLink';
 
 interface Props {
   gigs: string;
@@ -25,75 +26,39 @@ const availableLanguages: { code: AvailableLanguages; name: string; flag: string
 
 <ul>
   <li>
-    <TmLink
-      onclick="document.querySelector('input').click()"
-      classes="nav"
-      href="#gigs"
-      target="_self"
-    >
-      {gigs}
-    </TmLink>
+    <TmLink client:visible><a class="nav" href="#gigs" target="_self">{gigs}</a></TmLink>
   </li>
   <li>
-    <TmLink
-      onclick="document.querySelector('input').click()"
-      classes="nav"
-      href="#media"
-      target="_self"
-    >
-      {media}
-    </TmLink>
+    <TmLink client:visible><a class="nav" href="#media" target="_self">{media}</a></TmLink>
   </li>
   <li>
-    <TmLink
-      onclick="document.querySelector('input').click()"
-      classes="nav"
-      href="#news"
-      target="_self"
-    >
-      {news}
-    </TmLink>
+    <TmLink client:visible><a class="nav" href="#news" target="_self">{news}</a></TmLink>
   </li>
   <li>
-    <TmLink
-      onclick="document.querySelector('input').click()"
-      classes="nav"
-      href="#history"
-      target="_self"
-    >
-      {history}
-    </TmLink>
+    <TmLink client:visible><a class="nav" href="#history" target="_self">{history}</a></TmLink>
   </li>
   <li>
-    <TmLink
-      onclick="document.querySelector('input').click()"
-      classes="nav"
-      href="#contact"
-      target="_self"
-    >
-      {contact}
-    </TmLink>
+    <TmLink client:visible><a class="nav" href="#contact" target="_self">{contact}</a></TmLink>
   </li>
 </ul>
 
-<select
-  aria-label="Language"
-  onchange="document.cookie = `language=${this.value}; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT`, localStorage.removeItem('posts'), localStorage.removeItem('gigs'), location.href = ''"
->
-  {
-    availableLanguages.map((lang) =>
-      language === lang.code ? (
-        <option value={lang.code} selected>
-          {lang.flag} {lang.name}
-        </option>
-      ) : (
-        <option value={lang.code}>
-          {lang.flag} {lang.name}
-        </option>
+<TmLanguageSelector client:visible>
+  <select aria-label="Language">
+    {
+      availableLanguages.map((lang) =>
+        language === lang.code ? (
+          <option value={lang.code} selected>
+            {lang.flag} {lang.name}
+          </option>
+        ) : (
+          <option value={lang.code}>
+            {lang.flag} {lang.name}
+          </option>
+        )
       )
-    )
-  }
-</select>
+    }
+  </select>
+</TmLanguageSelector>
 
 <style>
   select {
@@ -114,5 +79,10 @@ const availableLanguages: { code: AvailableLanguages; name: string; flag: string
   li {
     margin-bottom: 40px;
     text-align: center;
+  }
+
+  .nav {
+    font-size: 25px;
+    text-decoration: none;
   }
 </style>

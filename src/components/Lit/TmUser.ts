@@ -8,7 +8,7 @@ export class TmUser extends LitElement {
   };
 
   render() {
-    return html` <slot name="username" @click=${this.openModal}></slot>
+    return html`<slot name="username" @click=${this.openModal}></slot>
       <slot name="user-icon" @click=${this.openModal}></slot>`;
   }
 }
