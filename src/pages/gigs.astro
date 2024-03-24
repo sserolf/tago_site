@@ -1,0 +1,147 @@
+---
+import Config from 'src/layouts/Config.astro';
+import { checkUser } from 'src/utils/checkUser';
+import { getGigs } from 'src/utils/gigsUtils';
+
+const sessionCookie = Astro.cookies.get('session');
+let verified;
+if (sessionCookie) verified = await checkUser(sessionCookie);
+if (!verified) return Astro.redirect('login?error=1');
+const username = (verified && verified.username) || null;
+
+const { upcomingGigs, pastGigs } = await getGigs('es_ES', 0);
+---
+
+<Config username={username}>
+  <h1>CONCIERTOS EN BASE DE DATOS</h1>
+  <h2>CONCIERTOS FUTUROS</h2>
+  <table>
+    <tr>
+      <th>#</th>
+      <th>name</th>
+      <th>dateToShow</th>
+      <th>date</th>
+      <th>url</th>
+    </tr>
+    {
+      upcomingGigs.map((gig, count) => {
+        return (
+          <tr>
+            <td>
+              <div>{count + 1}</div>
+            </td>
+            <td>
+              <div title={gig.name} onclick="alert(this.innerText)">
+                <pre>{gig.name}</pre>
+              </div>
+            </td>
+            <td>
+              <div title={gig.dateToShow} onclick="alert(this.innerText)">
+                <pre>{gig.dateToShow}</pre>
+              </div>
+            </td>
+            <td>
+              <div title={gig.date} onclick="alert(this.innerText)">
+                <pre>{gig.date}</pre>
+              </div>
+            </td>
+            <td>
+              <div title={gig.url} onclick="alert(this.innerText)">
+                <pre>{gig.url}</pre>
+              </div>
+            </td>
+          </tr>
+        );
+      })
+    }
+  </table>
+  <h2>CONCIERTOS PASADOS</h2>
+  <table>
+    <tr>
+      <th>#</th>
+      <th>name</th>
+      <th>dateToShow</th>
+      <th>date</th>
+      <th>url</th>
+    </tr>
+    {
+      pastGigs.map((gig, count) => {
+        return (
+          <tr>
+            <td>
+              <div>{count + 1}</div>
+            </td>
+            <td>
+              <div title={gig.name} onclick="alert(this.innerText)">
+                <pre>{gig.name}</pre>
+              </div>
+            </td>
+            <td>
+              <div title={gig.dateToShow} onclick="alert(this.innerText)">
+                <pre>{gig.dateToShow}</pre>
+              </div>
+            </td>
+            <td>
+              <div title={gig.date} onclick="alert(this.innerText)">
+                <pre>{gig.date}</pre>
+              </div>
+            </td>
+            <td>
+              <div title={gig.url} onclick="alert(this.innerText)">
+                <pre>{gig.url}</pre>
+              </div>
+            </td>
+          </tr>
+        );
+      })
+    }
+  </table>
+</Config>
+
+<style>
+  table {
+    width: 100%;
+    height: fit-content;
+    max-height: 300px;
+    scrollbar-width: thin;
+    border-collapse: collapse;
+    overflow: scroll;
+    display: block;
+  }
+
+  th {
+    background-color: #f2f2f2;
+  }
+
+  th,
+  td {
+    border: 1px solid #f2f2f2;
+    padding: 8px;
+    text-align: left;
+  }
+
+  tr {
+    background-color: #f2f2f2;
+  }
+
+  tr:nth-child(even) {
+    background-color: #e5e0e0;
+  }
+
+  th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #f2f2f2;
+    color: black;
+  }
+
+  div,
+  pre {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: fit-content;
+    max-width: 170px;
+    overflow: hidden;
+  }
+</style>

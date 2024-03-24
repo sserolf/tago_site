@@ -1,0 +1,134 @@
+---
+import Config from 'src/layouts/Config.astro';
+import { checkUser } from 'src/utils/checkUser';
+import { getIgPosts } from 'src/utils/igPostsUtils';
+
+const sessionCookie = Astro.cookies.get('session');
+let verified;
+if (sessionCookie) verified = await checkUser(sessionCookie);
+if (!verified) return Astro.redirect('login?error=1');
+const username = (verified && verified.username) || null;
+
+const { posts } = await getIgPosts('es_ES', 0);
+---
+
+<Config username={username}>
+  <h1>POSTS EN BASE DE DATOS</h1>
+  <table>
+    <tr>
+      <th>#</th>
+      <th>id</th>
+      <th>caption</th>
+      <th>date_timestamp</th>
+      <th>dateToShow</th>
+      <th>permalink</th>
+      <th>media_type</th>
+      <th>media_url</th>
+      <th>children</th>
+      <th>title</th>
+    </tr>
+    {
+      posts.map((post, count) => {
+        return (
+          <tr>
+            <td>
+              <div>{count + 1}</div>
+            </td>
+            <td>
+              <div title={post.id} onclick="alert(this.innerText)">
+                <pre>{post.id}</pre>
+              </div>
+            </td>
+            <td>
+              <div title={post.caption} onclick="alert(this.innerText)">
+                <pre>{post.caption}</pre>
+              </div>
+            </td>
+            <td>
+              <div title={post.date_timestamp} onclick="alert(this.innerText)">
+                <pre>{post.date_timestamp}</pre>
+              </div>
+            </td>
+            <td>
+              <div title={post.dateToShow} onclick="alert(this.innerText)">
+                <pre>{post.dateToShow}</pre>
+              </div>
+            </td>
+            <td>
+              <div title={post.permalink} onclick="alert(this.innerText)">
+                <pre>{post.permalink}</pre>
+              </div>
+            </td>
+            <td>
+              <div title={post.media_type} onclick="alert(this.innerText)">
+                <pre>{post.media_type}</pre>
+              </div>
+            </td>
+            <td>
+              <div title={post.media_url} onclick="alert(this.innerText)">
+                <pre>{post.media_url}</pre>
+              </div>
+            </td>
+            <td>
+              <div title={post.children.toString()} onclick="alert(this.innerText)">
+                <pre>{post.children}</pre>
+              </div>
+            </td>
+            <td>
+              <div title={post.title} onclick="alert(this.innerText)">
+                <pre>{post.title}</pre>
+              </div>
+            </td>
+          </tr>
+        );
+      })
+    }
+  </table>
+</Config>
+
+<style>
+  table {
+    width: 100%;
+    height: 300px;
+    scrollbar-width: thin;
+    border-collapse: collapse;
+    overflow: scroll;
+    display: block;
+  }
+
+  th {
+    background-color: #f2f2f2;
+  }
+
+  th,
+  td {
+    border: 1px solid #f2f2f2;
+    padding: 8px;
+    text-align: left;
+  }
+
+  tr {
+    background-color: #f2f2f2;
+  }
+
+  tr:nth-child(even) {
+    background-color: #e5e0e0;
+  }
+
+  th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #f2f2f2;
+    color: black;
+  }
+
+  div,
+  pre {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: fit-content;
+    max-width: 240px;
+    overflow: hidden;
+  }
+</style>

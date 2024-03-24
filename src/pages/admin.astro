@@ -1,0 +1,43 @@
+---
+import Config from 'src/layouts/Config.astro';
+import { checkUser } from 'src/utils/checkUser';
+const sessionCookie = Astro.cookies.get('session');
+let verified;
+if (sessionCookie) verified = await checkUser(sessionCookie);
+if (!verified) return Astro.redirect('login?error=1');
+const username = (verified && verified.username) || null;
+---
+
+<Config username={username}>
+  <a href="gigs">Conciertos</a>
+  <a href="posts">Posts</a>
+</Config>
+
+<style>
+  h1 {
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 50px;
+  }
+
+  a {
+    color: white;
+    display: block;
+    font-size: 20px;
+    width: 80%;
+    max-width: 700px;
+    padding: 10px 0;
+    margin: 10px auto;
+    background-color: rgb(217, 43, 226);
+    border: none;
+    border-radius: 5px;
+    box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    text-decoration: none;
+    padding: 15px 0;
+  }
+
+  a:hover {
+    background-color: rgb(178, 35, 186);
+  }
+</style>
