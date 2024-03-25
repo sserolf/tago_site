@@ -37,6 +37,18 @@ export class TmPostsButtons extends LitElement {
     this.requestUpdate();
   };
 
+  openModal = (ev: Event) => {
+    const currentImage = ev.target as HTMLImageElement;
+    const div = document.querySelector('#postsModal') as HTMLDivElement;
+    const img = document.querySelector('#postsModalImg') as HTMLImageElement;
+    img.src = currentImage.getAttribute('src') as string;
+    div.onclick = () => {
+      div.style.display = 'none';
+      img.src = '';
+    };
+    div.style.display = 'flex';
+  };
+
   connectedCallback() {
     super.connectedCallback();
     window.onbeforeunload = () => {
@@ -68,16 +80,9 @@ export class TmPostsButtons extends LitElement {
               ? html`<span class="igPost">${post.dateToShow}</span>`
               : nothing}
             ${post.caption ? html`<p>${post.caption}</p>` : nothing}
-            ${image && post.permalink
-              ? html`<a href=${post.permalink} target="_blank"
-                  ><img
-                    loading="lazy"
-                    src="${image}"
-                    alt=${post.title ? post.title : post.id ? post.id : 'alt'}
-                /></a>`
-              : nothing}
-            ${image && !post.permalink
+            ${image
               ? html`<img
+                  @click=${this.openModal}
                   loading="lazy"
                   src="${image}"
                   alt=${post.title ? post.title : post.id ? post.id : 'alt'}
@@ -89,20 +94,12 @@ export class TmPostsButtons extends LitElement {
                   if (carouselItem.media_type === 'VIDEO') {
                     return html`<video src=${carouselItem.media_url} controls></video>`;
                   } else {
-                    if (post.permalink) {
-                      return html`<a href=${post.permalink} target="_blank"
-                        ><img
-                          loading="lazy"
-                          src=${carouselItem.media_url}
-                          alt=${carouselItem.id ? carouselItem.id : 'alt'}
-                      /></a>`;
-                    } else {
-                      return html`<img
-                        loading="lazy"
-                        src=${carouselItem.media_url}
-                        alt=${carouselItem.id ? carouselItem.id : 'alt'}
-                      />`;
-                    }
+                    return html`<img
+                      @click=${this.openModal}
+                      loading="lazy"
+                      src=${carouselItem.media_url}
+                      alt=${carouselItem.id ? carouselItem.id : 'alt'}
+                    />`;
                   }
                 })
               : nothing}

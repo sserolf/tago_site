@@ -1,4 +1,5 @@
 ---
+import { TmPostsModal } from 'src/components/Lit/TmPostsModal';
 const { timestamp, permalink, media, caption, type, id, title } = Astro.props;
 import type { ChildrenData } from 'src/types/posts';
 let carousel: ChildrenData[] = [],
@@ -24,13 +25,12 @@ if (type === 'CAROUSEL_ALBUM') {
 {!permalink && !title && <span class="igPost">{timestamp}</span>}
 {caption && <p>{caption}</p>}
 {
-  image && permalink && (
-    <a href={permalink} target="_blank">
+  image && (
+    <TmPostsModal client:visible>
       <img loading="lazy" src={image} alt={title ? title : id ? id : 'alt'} />
-    </a>
+    </TmPostsModal>
   )
 }
-{image && !permalink && <img loading="lazy" src={image} alt={title ? title : id ? id : 'alt'} />}
 {video && <video src={video} controls />}
 {
   carousel &&
@@ -38,25 +38,15 @@ if (type === 'CAROUSEL_ALBUM') {
       if (carouselItem.media_type === 'VIDEO') {
         return <video src={carouselItem.media_url} controls />;
       } else {
-        if (permalink) {
-          return (
-            <a href={permalink} target="_blank">
-              <img
-                loading="lazy"
-                src={carouselItem.media_url}
-                alt={carouselItem.id ? carouselItem.id : 'alt'}
-              />
-            </a>
-          );
-        } else {
-          return (
+        return (
+          <TmPostsModal client:visible>
             <img
               loading="lazy"
               src={carouselItem.media_url}
               alt={carouselItem.id ? carouselItem.id : 'alt'}
             />
-          );
-        }
+          </TmPostsModal>
+        );
       }
     })
 }

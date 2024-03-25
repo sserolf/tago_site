@@ -8,6 +8,7 @@ interface Props {
 const { language, locale } = Astro.props;
 
 // ASTRO COMPONENTS
+import TmPostsModalDiv from 'src/components/Astro/TmPostsModalDiv.astro';
 import TmHeaderIcons from 'src/components/Astro/TmHeaderIcons.astro';
 import TmContent from 'src/components/Astro/TmContent.astro';
 import TmSection from 'src/components/Astro/TmSection.astro';
@@ -28,6 +29,7 @@ import { getDictionary } from 'src/locales/getDictionary';
 const dictionary = getDictionary(language);
 ---
 
+<TmPostsModalDiv />
 <TmHeaderIcons data={HEADER_ICONS} />
 <TmContent
   gigs={dictionary.Common.gigsTitle}
