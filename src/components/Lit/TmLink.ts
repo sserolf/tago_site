@@ -3,11 +3,11 @@ import { customElement } from 'lit/decorators.js';
 
 @customElement('tm-link')
 export class TmLink extends LitElement {
-  goToSection = () => {
+  closeNavMenu = () => {
     (document.querySelector('input') as HTMLInputElement).click();
   };
 
   render() {
-    return html`<slot @click=${this.goToSection}></slot>`;
+    return html`<slot @click=${this.closeNavMenu}></slot>`;
   }
 }
