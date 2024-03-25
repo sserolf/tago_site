@@ -144,6 +144,7 @@ export class TmPostsButtons extends LitElement {
       transition: scale 0.2s;
       aspect-ratio: 16 / 9;
       object-fit: cover;
+      cursor: pointer;
     }
 
     img:hover {
