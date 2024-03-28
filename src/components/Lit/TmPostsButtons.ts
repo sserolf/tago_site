@@ -86,6 +86,8 @@ export class TmPostsButtons extends LitElement {
                   loading="lazy"
                   src="${image}"
                   alt=${post.title ? post.title : post.id ? post.id : 'alt'}
+                  width="792"
+                  height="446"
                 />`
               : nothing}
             ${video ? html`<video src="${video}" controls></video>` : nothing}
@@ -99,6 +101,8 @@ export class TmPostsButtons extends LitElement {
                       loading="lazy"
                       src=${carouselItem.media_url}
                       alt=${carouselItem.id ? carouselItem.id : 'alt'}
+                      width="792"
+                      height="446"
                     />`;
                   }
                 })
@@ -138,11 +142,10 @@ export class TmPostsButtons extends LitElement {
 
     img {
       border-radius: 5px;
-      width: 100%;
-      height: auto;
+      max-width: 100%;
+      max-height: min(100vw, 600px);
       scale: 0.99;
       transition: scale 0.2s;
-      aspect-ratio: 16 / 9;
       object-fit: cover;
       cursor: pointer;
     }

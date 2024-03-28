@@ -1,5 +1,6 @@
 ---
-import TmImage from 'src/components/Astro/TmImage.astro';
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
 
 interface Props {
   data: {
@@ -9,29 +10,59 @@ interface Props {
 }
 
 const { data } = Astro.props;
+const images = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/images/header_icons/*.webp'
+);
 ---
 
 <header>
   {
     data.map((item) => {
       if (item.title === 'band') {
-        return <TmImage classes={item.title} src={item.img} alt={item.title} />;
+        return <Image class={item.title} src={images[item.img]()} alt={item.title} />;
       } else if (item.title === 'menu') {
         return (
           <>
             <label for="nav-menu">
-              <TmImage classes={item.title} src={item.img} alt={item.title} />
+              <Image class={item.title} src={images[item.img]()} alt={item.title} />
             </label>
           </>
         );
       } else {
-        return <TmImage classes={item.title} src={item.img} alt={item.title} />;
+        return <Image class={item.title} src={images[item.img]()} alt={item.title} />;
       }
     })
   }
 </header>
 
 <style>
+  img {
+    scale: 0.9;
+    transition: scale 0.2s;
+  }
+
+  img:hover {
+    scale: 1;
+  }
+
+  .band {
+    height: 67.5px;
+    width: 67.5px;
+    margin: 2px 0;
+    cursor: pointer;
+  }
+
+  .fatmusik {
+    height: 50px;
+    width: 50px;
+  }
+
+  .menu {
+    height: 64px;
+    width: 64px;
+    cursor: pointer;
+  }
+
   header {
     background-color: whitesmoke;
     border-bottom: 1px solid rgb(50 50 50);
