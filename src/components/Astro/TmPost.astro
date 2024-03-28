@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import { TmPostsModal } from 'src/components/Lit/TmPostsModal';
 const { timestamp, permalink, media, caption, type, id, title } = Astro.props;
 import type { ChildrenData } from 'src/types/posts';
@@ -27,7 +28,7 @@ if (type === 'CAROUSEL_ALBUM') {
 {
   image && (
     <TmPostsModal client:visible>
-      <img src={image} alt={title ? title : id ? id : 'alt'} width={792} height={446} />
+      <Image src={image} alt={title ? title : id ? id : 'alt'} width={792} height={446} />
     </TmPostsModal>
   )
 }
@@ -40,7 +41,7 @@ if (type === 'CAROUSEL_ALBUM') {
       } else {
         return (
           <TmPostsModal client:visible>
-            <img
+            <Image
               src={carouselItem.media_url}
               alt={carouselItem.id ? carouselItem.id : 'alt'}
               width={792}

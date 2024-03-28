@@ -4,7 +4,7 @@ import { customElement } from 'lit/decorators.js';
 @customElement('tm-link')
 export class TmLink extends LitElement {
   closeNavMenu = () => {
-    (document.querySelector('input') as HTMLInputElement).click();
+    (document.querySelector('nav') as HTMLInputElement).classList.remove('nav-opened');
   };
 
   render() {

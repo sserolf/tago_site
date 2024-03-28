@@ -15,13 +15,7 @@ const { data } = Astro.props;
       if (item.title === 'band') {
         return <img class={item.title} src={item.img} alt={item.title} width={50} height={50} />;
       } else if (item.title === 'menu') {
-        return (
-          <>
-            <label for="nav-menu">
-              <img class={item.title} src={item.img} alt={item.title} width={50} height={50} />
-            </label>
-          </>
-        );
+        return <img class={item.title} src={item.img} alt={item.title} width={50} height={50} />;
       } else {
         return <img class={item.title} src={item.img} alt={item.title} width={50} height={50} />;
       }

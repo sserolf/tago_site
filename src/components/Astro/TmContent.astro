@@ -1,6 +1,6 @@
 ---
 import type { AvailableLanguages } from 'src/types/language';
-import TmNav from 'src/components/Astro/TmNav.astro';
+import TmNavContent from 'src/components/Astro/TmNavContent.astro';
 import { TmMainContent } from 'src/components/Lit/TmMainContent';
 
 interface Props {
@@ -15,9 +15,8 @@ interface Props {
 const { gigs, media, news, history, contact, language } = Astro.props;
 ---
 
-<input type="checkbox" id="nav-menu" />
 <nav>
-  <TmNav
+  <TmNavContent
     gigs={gigs}
     media={media}
     news={news}
@@ -44,7 +43,7 @@ const { gigs, media, news, history, contact, language } = Astro.props;
     height: calc(100% - 12.75em);
   }
 
-  main:has(#nav-menu:checked) {
+  .main-nav-opened {
     overflow: hidden;
   }
 
@@ -68,7 +67,7 @@ const { gigs, media, news, history, contact, language } = Astro.props;
     align-items: center;
   }
 
-  #nav-menu:checked ~ nav {
+  .nav-opened {
     transform: translateX(0%);
   }
 </style>
