@@ -10,26 +10,23 @@ interface Props {
 }
 
 const { data } = Astro.props;
-const images = import.meta.glob<{ default: ImageMetadata }>(
-  '/src/assets/images/header_icons/*.webp'
-);
 ---
 
 <header>
   {
     data.map((item) => {
       if (item.title === 'band') {
-        return <Image class={item.title} src={images[item.img]()} alt={item.title} />;
+        return <Image class={item.title} src={item.img} alt={item.title} width={50} height={50} />;
       } else if (item.title === 'menu') {
         return (
           <>
             <label for="nav-menu">
-              <Image class={item.title} src={images[item.img]()} alt={item.title} />
+              <Image class={item.title} src={item.img} alt={item.title} width={50} height={50} />
             </label>
           </>
         );
       } else {
-        return <Image class={item.title} src={images[item.img]()} alt={item.title} />;
+        return <Image class={item.title} src={item.img} alt={item.title} width={50} height={50} />;
       }
     })
   }

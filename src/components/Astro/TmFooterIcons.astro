@@ -1,5 +1,4 @@
 ---
-import type { ImageMetadata } from 'astro';
 import { Image } from 'astro:assets';
 interface Props {
   data: {
@@ -10,16 +9,13 @@ interface Props {
 }
 
 const { data } = Astro.props;
-const images = import.meta.glob<{ default: ImageMetadata }>(
-  '/src/assets/images/footer_icons/*.webp'
-);
 ---
 
 <div>
   {
     data.map((item) => (
       <a href={item.url} target="_blank">
-        <Image src={images[item.img]()} alt={item.title} width={70} />
+        <Image src={item.img} alt={item.title} width={70} height={70} />
       </a>
     ))
   }
